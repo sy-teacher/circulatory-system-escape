@@ -1,0 +1,241 @@
+/* 게임 화면 배치: 3D 장면 위에 가장자리 패널을 겹친다.
+   빈 영역은 pointer-events: none 이라 드래그로 둘러보기가 그대로 동작한다. */
+
+.game-screen {
+  --left-w: clamp(280px, 28vw, 360px);
+  --right-w: clamp(320px, 34vw, 460px);
+  --top-row: calc(60px + env(safe-area-inset-top, 0px));
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #12091d;
+}
+
+.game-main,
+.game-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.ov-region {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  pointer-events: none;
+}
+.ov-region > * {
+  pointer-events: auto;
+}
+
+/* 위 오른쪽: 메뉴 버튼 */
+.ov-top-right {
+  top: calc(8px + env(safe-area-inset-top, 0px));
+  right: calc(8px + env(safe-area-inset-right, 0px));
+  flex-direction: row;
+  /* 왼쪽 탐험 상태 패널과 겹치지 않게 그 오른쪽 공간만 쓴다 */
+  max-width: calc(100% - var(--left-w) - 32px);
+  z-index: 3;
+}
+.ov-top-right > .hud-actions {
+  flex-wrap: wrap;
+}
+
+/* 왼쪽: 탐험 상태 + 단서 목록(아래쪽 조향 버튼 자리는 비워 둔다) */
+.ov-left {
+  top: calc(8px + env(safe-area-inset-top, 0px));
+  left: calc(8px + env(safe-area-inset-left, 0px));
+  bottom: calc(104px + var(--safe-bottom));
+  width: var(--left-w);
+}
+
+/* 위 가운데: 확대 관찰 카드(왼쪽 목록과 오른쪽 문항 사이) */
+.ov-top-center {
+  top: var(--top-row);
+  left: calc(var(--left-w) + 24px);
+  right: 16px;
+  align-items: center;
+  z-index: 2;
+}
+.ov-top-center > * {
+  max-width: 440px;
+}
+.phase-question .ov-top-center {
+  right: calc(var(--right-w) + 24px);
+}
+
+/* 오른쪽: 추론 문항 / 설명 */
+.ov-right {
+  top: var(--top-row);
+  right: calc(8px + env(safe-area-inset-right, 0px));
+  bottom: calc(8px + var(--safe-bottom));
+  width: var(--right-w);
+}
+.ov-right > * {
+  max-height: 100%;
+}
+
+/* 아래 가운데: 대화 상자 / 이동 안내 */
+.ov-bottom {
+  left: 50%;
+  bottom: calc(8px + var(--safe-bottom));
+  width: min(880px, calc(100% - 16px));
+  transform: translateX(-50%);
+  align-items: center;
+}
+.ov-bottom > * {
+  width: 100%;
+}
+.ov-bottom > .travel {
+  max-width: 560px;
+}
+.ov-bottom > .dlg-reopen {
+  width: auto;
+  align-self: flex-start;
+}
+
+/* 3D 장면 불러오는 중 */
+.stage-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--panel-muted);
+  font-weight: 700;
+  background: radial-gradient(circle at 50% 45%, #5a1d2e 0%, #2a0f22 55%, #12091d 100%);
+}
+.stage-loading-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-3);
+  animation: stage-beat 0.94s ease-in-out infinite;
+}
+@keyframes stage-beat {
+  0%,
+  100% {
+    transform: scale(0.8);
+  }
+  30% {
+    transform: scale(1.15);
+  }
+}
+
+/* 중간 너비: 가운데 카드가 좁아지면 문항 위에 겹쳐 띄운다 */
+@media (max-width: 1100px) {
+  .phase-question .ov-top-center {
+    right: 16px;
+  }
+}
+
+/* ── 세로 휴대폰 ─────────────────────── */
+@media (max-width: 760px) and (orientation: portrait) {
+  .ov-top-right {
+    left: 8px;
+    right: 8px;
+    max-width: none;
+  }
+  .ov-top-right > .hud-actions {
+    flex: 1 1 auto;
+  }
+
+  /* 탐험 상태 + 단서 목록: 화면의 절반 남짓까지만(나머지는 3D 화면) */
+  .ov-left {
+    top: var(--top-row);
+    left: 8px;
+    right: 8px;
+    bottom: auto;
+    width: auto;
+    max-height: min(56%, calc(100% - var(--top-row) - 100px));
+  }
+  .phase-question:not(.is-quiz-collapsed) .ov-left {
+    max-height: calc(100% - var(--top-row) - var(--sheet-h) - 8px);
+  }
+  /* 좁은 공간에서는 단서 목록을 짜부라뜨리지 않고 왼쪽 열 안에서 스크롤한다 */
+  .phase-question .ov-left {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .phase-question .ov-left > .clue-tray {
+    flex-shrink: 0;
+  }
+
+  /* 아래쪽 시트: 영역 높이를 정해 두고 패널을 아래에 붙인다(패널 안에서 스크롤) */
+  .game-screen {
+    --sheet-h: min(60%, calc(100% - 250px));
+  }
+  .ov-right {
+    top: calc(100% - var(--sheet-h));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    justify-content: flex-end;
+  }
+
+  /* 단서 카드: 관찰 중에는 조향 버튼 위, 추론 중에는 위쪽 */
+  .ov-top-center {
+    top: auto;
+    left: 8px;
+    right: 8px;
+    bottom: calc(92px + var(--safe-bottom));
+  }
+  .phase-question .ov-top-center {
+    top: var(--top-row);
+    bottom: auto;
+    right: 8px;
+  }
+  .ov-top-center > * {
+    max-width: none;
+  }
+
+  .ov-bottom {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    transform: none;
+  }
+  .ov-bottom > .dlg {
+    border-radius: 20px 20px 0 0;
+    padding-bottom: calc(10px + var(--safe-bottom));
+  }
+  .ov-bottom > .dlg-reopen {
+    margin: 0 0 calc(8px + var(--safe-bottom)) 8px;
+  }
+  .phase-travel .ov-bottom {
+    left: 8px;
+    right: 8px;
+    bottom: calc(90px + var(--safe-bottom));
+  }
+}
+
+/* ── 낮은 가로 화면(가로 휴대폰) ───────── */
+@media (max-height: 520px) and (orientation: landscape) {
+  .game-screen {
+    --left-w: clamp(230px, 32vw, 320px);
+    --right-w: clamp(280px, 44vw, 420px);
+  }
+  .ov-left {
+    bottom: calc(92px + var(--safe-bottom));
+  }
+  .ov-bottom {
+    width: min(760px, calc(100% - 16px));
+  }
+  .phase-travel .ov-bottom {
+    width: min(560px, calc(100% - 200px));
+  }
+  .phase-question .ov-top-center {
+    right: 16px;
+  }
+}

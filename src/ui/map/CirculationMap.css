@@ -1,0 +1,401 @@
+/* 순환계 지도: 종이 느낌(밝은 바탕 + 진한 글자). 화면·인쇄 모두 같은 색을 쓴다. */
+
+.cmap {
+  --cmap-pulmonary: #138a7a;
+  --cmap-systemic: #d26a12;
+  margin: 0;
+  color: var(--paper-text);
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: 16px;
+  padding: 10px 10px 8px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.cmap-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0 0 6px;
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.cmap-where,
+.cmap-unknown {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  border: 2px dashed #b8a98f;
+  background: #fff;
+}
+.cmap-where {
+  border-style: solid;
+  border-color: #f2b705;
+  background: #fff6d6;
+}
+
+.cmap-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font);
+  user-select: none;
+}
+.cmap-svg text {
+  fill: var(--paper-text);
+}
+
+/* 영역 */
+.cmap-region {
+  fill: none;
+  stroke: #d8cbb6;
+  stroke-width: 1.5;
+}
+.cmap-region.is-lung {
+  fill: #fdf1f3;
+}
+.cmap-region.is-heart {
+  fill: #fff0f1;
+  stroke: #efb2bb;
+}
+.cmap-region.is-body {
+  fill: #fff6ea;
+}
+.cmap-svg .cmap-region-label {
+  font-size: 13px;
+  font-weight: 800;
+  fill: var(--paper-muted);
+}
+.cmap-side rect {
+  fill: var(--paper);
+  stroke: #efb2bb;
+  stroke-width: 1;
+}
+.cmap-svg .cmap-side text {
+  fill: var(--paper-muted);
+  font-weight: 700;
+}
+.cmap-svg .cmap-side.is-heart text {
+  fill: #b03552;
+  font-weight: 800;
+}
+.cmap-septum {
+  stroke: #e7a1ad;
+  stroke-width: 2;
+  stroke-dasharray: 2 3;
+}
+
+/* 연결선(산소 기호색 + 선 모양) */
+.cmap-edge {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+}
+.cmap-edge.is-rich {
+  stroke: var(--o2-rich);
+}
+.cmap-edge.is-poor {
+  stroke: var(--o2-poor);
+  stroke-dasharray: 9 4;
+}
+.cmap-edge-casing {
+  fill: none;
+  stroke: var(--paper);
+  stroke-width: 9;
+  stroke-linejoin: round;
+}
+.cmap-arrow.is-rich {
+  fill: var(--o2-rich);
+}
+.cmap-arrow.is-poor {
+  fill: var(--o2-poor);
+}
+.cmap-leader {
+  stroke-width: 1.2;
+  stroke-dasharray: 2 2;
+}
+.cmap-leader.is-rich {
+  stroke: var(--o2-rich);
+}
+.cmap-leader.is-poor {
+  stroke: var(--o2-poor);
+}
+.cmap-o2 rect {
+  fill: #fff;
+  stroke-width: 1.5;
+}
+.cmap-o2.is-rich rect {
+  stroke: var(--o2-rich);
+}
+.cmap-o2.is-poor rect {
+  stroke: var(--o2-poor);
+}
+.cmap-svg .cmap-o2 text {
+  font-weight: 800;
+}
+.cmap-svg .cmap-o2.is-rich text {
+  fill: #9c1726;
+}
+.cmap-svg .cmap-o2.is-poor text {
+  fill: #5a2a9a;
+}
+
+/* 산소량이 바뀌는 구간 */
+.cmap-zone rect {
+  fill: #fff;
+  stroke: #2b2333;
+  stroke-width: 1.2;
+}
+.cmap-zone.is-up rect {
+  fill: #ffe9ec;
+}
+.cmap-zone.is-down rect {
+  fill: #f2eafc;
+}
+.cmap-svg .cmap-zone text {
+  font-weight: 800;
+}
+
+/* 지점 카드 */
+.cmap-card {
+  stroke-width: 2;
+}
+.cmap-node.is-chamber .cmap-card {
+  fill: #ffe3e7;
+  stroke: #d9667e;
+}
+.cmap-node.is-vessel .cmap-card {
+  fill: #fff7f0;
+  stroke: #c98d78;
+}
+.cmap-node.is-capillary .cmap-card {
+  fill: #fff4e3;
+  stroke: #d99a52;
+}
+.cmap-card-pattern {
+  pointer-events: none;
+}
+.cmap-mesh {
+  fill: none;
+  stroke: #f0c58e;
+  stroke-width: 1;
+}
+.cmap-svg .cmap-name {
+  font-size: 13px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.cmap-node.is-current .cmap-card {
+  stroke: #f2a900;
+  stroke-width: 4;
+}
+
+/* 학습 상태 배지(SVG): .status-<상태>와 같은 색 */
+.cmap-tag rect {
+  stroke: rgba(43, 35, 51, 0.35);
+  stroke-width: 1;
+}
+.cmap-svg .cmap-tag text {
+  font-weight: 800;
+  fill: #1b1124;
+}
+.cmap-tag.status-first-correct rect {
+  fill: var(--st-first);
+}
+.cmap-tag.status-hint-correct rect {
+  fill: var(--st-hint);
+}
+.cmap-tag.status-wrong-then-solved rect {
+  fill: var(--st-solved);
+}
+.cmap-tag.status-needs-review rect {
+  fill: var(--st-review);
+}
+.cmap-tag.status-unchecked rect {
+  fill: var(--st-unchecked);
+}
+
+/* 현재 위치 */
+.cmap-here rect {
+  fill: #2b2333;
+  stroke: #f2a900;
+  stroke-width: 2;
+}
+.cmap-svg .cmap-here text {
+  fill: #fff;
+  font-weight: 800;
+}
+
+/* 순환 범위(허파순환: 긴 점선 · 온몸순환: 짧은 점선) */
+.cmap-circ-outline {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.cmap-circ-outline.is-pulmonary {
+  stroke: var(--cmap-pulmonary, #138a7a);
+  stroke-dasharray: 8 4;
+}
+.cmap-circ-outline.is-systemic {
+  stroke: var(--cmap-systemic, #d26a12);
+  stroke-dasharray: 1 4;
+  stroke-width: 3;
+}
+.cmap-svg .cmap-circ-label text {
+  font-size: 13px;
+  font-weight: 900;
+}
+.cmap-svg .cmap-circ-label.is-pulmonary text {
+  fill: #0d6b5f;
+}
+.cmap-svg .cmap-circ-label.is-systemic text {
+  fill: #a14f08;
+}
+
+/* 선택 모드 */
+.cmap-hatch-bg {
+  fill: rgba(19, 138, 122, 0.1);
+}
+.cmap-hatch {
+  stroke: rgba(19, 138, 122, 0.55);
+  stroke-width: 2.4;
+}
+.cmap-dots-bg {
+  fill: rgba(210, 106, 18, 0.08);
+}
+.cmap-dots {
+  fill: rgba(210, 106, 18, 0.6);
+}
+.cmap-sel-fill {
+  pointer-events: none;
+}
+.cmap-sel-tag.is-pulmonary rect {
+  fill: #c9f0ea;
+  stroke: #138a7a;
+  stroke-width: 1.5;
+}
+.cmap-sel-tag.is-systemic rect {
+  fill: #ffe2c7;
+  stroke: #d26a12;
+  stroke-width: 1.5;
+}
+.cmap-sel-tag.is-none rect {
+  fill: #fff;
+  stroke: #b8a98f;
+  stroke-dasharray: 3 2;
+}
+.cmap-svg .cmap-sel-tag.is-none text {
+  fill: var(--paper-muted);
+  font-weight: 700;
+}
+.cmap.is-selecting .cmap-node {
+  cursor: pointer;
+  outline: none;
+}
+.cmap.is-selecting .cmap-node:hover .cmap-card {
+  stroke-width: 3;
+}
+.cmap.is-selecting .cmap-node.is-pressed .cmap-card {
+  stroke: #2b2333;
+  stroke-width: 3.5;
+}
+.cmap.is-selecting .cmap-node:focus-visible .cmap-card {
+  stroke: #0077cc;
+  stroke-width: 5;
+}
+
+/* 범례 */
+.cmap-legend {
+  margin-top: 6px;
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  color: var(--paper-text);
+}
+.cmap-legend-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0 0 4px;
+  padding: 0;
+  list-style: none;
+}
+.cmap-legend-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+}
+.cmap-legend-list li > span {
+  min-width: 0;
+}
+/* 따로 놓인 범례(어두운 패널 위) */
+.cmap-legend.is-standalone {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+}
+.cmap-legend-line {
+  width: 44px;
+  height: 12px;
+  flex: none;
+}
+.cmap-legend-icon {
+  font-weight: 900;
+}
+.cmap-legend-swatch {
+  display: inline-block;
+  width: 22px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #138a7a;
+  background: repeating-linear-gradient(45deg, rgba(19, 138, 122, 0.55) 0 2px, rgba(19, 138, 122, 0.1) 2px 6px);
+}
+.cmap-legend-swatch.is-systemic {
+  border-color: #d26a12;
+  background: radial-gradient(circle, rgba(210, 106, 18, 0.65) 1.6px, rgba(210, 106, 18, 0.08) 2px) 0 0 / 7px 7px;
+}
+.cmap-note {
+  margin: 2px 0 0;
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.cmap-legend.is-mini .cmap-legend-list {
+  gap: 2px 12px;
+}
+
+.cmap.is-compact {
+  padding: 6px;
+  border-radius: 12px;
+}
+
+/* 학습 상태 범례(어두운 패널·종이 양쪽에서 사용) */
+.status-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.status-badge-prefix {
+  margin-right: 2px;
+  padding-right: 6px;
+  border-right: 1px solid rgba(27, 17, 36, 0.35);
+}
+
+@media print {
+  .cmap {
+    border-color: #bbb;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

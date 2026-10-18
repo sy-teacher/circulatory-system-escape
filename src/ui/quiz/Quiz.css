@@ -1,0 +1,465 @@
+/* 추론 문항 + 응답 후 설명 */
+
+.quiz,
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 14px 16px 0;
+  animation: quiz-in 0.2s ease-out;
+}
+@keyframes quiz-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.quiz.is-collapsed {
+  padding: 10px 12px;
+  overflow: visible;
+}
+
+.quiz-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.quiz-inner[hidden] {
+  display: none;
+}
+
+.quiz-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.quiz-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 207, 63, 0.16);
+  color: var(--accent);
+  font-weight: 800;
+}
+.quiz-kind.is-review {
+  background: var(--st-hint);
+  color: #2a1600;
+}
+.quiz-collapse {
+  min-height: 44px;
+}
+
+.quiz-prompt {
+  margin: 0;
+  font-size: var(--fs-large);
+  line-height: 1.45;
+  word-break: keep-all;
+}
+.quiz-prompt:focus:not(:focus-visible),
+.fb-title:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.quiz-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.quiz-group {
+  margin: 0;
+  padding: 8px 12px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  min-width: 0;
+}
+.quiz-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 0 6px;
+  font-weight: 900;
+}
+.quiz-legend-state {
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+.quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.quiz-option:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.quiz-option.is-checked {
+  border-color: var(--accent);
+  background: rgba(255, 207, 63, 0.16);
+  font-weight: 800;
+}
+.quiz-option:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.quiz-option input {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.quiz-option-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  font-weight: 900;
+}
+.quiz-option-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.quiz-option-check {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.quiz-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quiz-hint-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.quiz-hint-btn {
+  border-color: rgba(255, 209, 102, 0.6);
+}
+.quiz-hint-note {
+  color: var(--panel-muted);
+}
+.quiz-hint-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.quiz-hint-list li {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border-left: 4px solid var(--st-hint);
+  background: rgba(255, 209, 102, 0.12);
+}
+.quiz-hint-list strong {
+  margin-right: 4px;
+  color: var(--st-hint);
+}
+
+/* 제출 버튼 줄은 패널 아래에 붙어 있어 긴 문항에서도 항상 보인다 */
+.quiz-actions,
+.fb-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 -16px;
+  padding: 10px 16px calc(14px + var(--safe-bottom));
+  background: var(--panel-bg-solid);
+  border-top: 1px solid var(--panel-border);
+}
+.fb-actions {
+  justify-content: flex-end;
+}
+.quiz-submit {
+  min-width: 140px;
+  font-size: var(--fs-large);
+}
+.quiz-need {
+  margin: 0;
+  color: var(--panel-muted);
+}
+
+.quiz-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.quiz-mini-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ── 응답 후 설명 ───────────────────── */
+.fb-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin: 0;
+  font-size: var(--fs-large);
+}
+.fb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: var(--fs-base);
+  font-weight: 900;
+}
+.fb-badge.is-correct {
+  background: var(--st-first);
+  color: #05351f;
+}
+.fb-badge.is-retry {
+  background: var(--st-solved);
+  color: #071a33;
+}
+.fb-badge.is-return {
+  background: var(--st-review);
+  color: #2a0d00;
+}
+.fb-badge.is-bonus {
+  background: var(--st-hint);
+  color: #2a1600;
+}
+
+.fb-speech {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.fb-speech .portrait {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  border-width: 2px;
+}
+.fb-speech-text {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.fb-speaker {
+  display: block;
+  color: var(--accent-3);
+  font-weight: 900;
+  font-size: var(--fs-small);
+}
+
+.fb-checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fb-checks li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.06);
+}
+.fb-checks li.is-ok {
+  border-color: rgba(89, 217, 142, 0.55);
+}
+.fb-checks li.is-retry {
+  border-color: rgba(127, 184, 255, 0.55);
+}
+.fb-check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+.is-ok .fb-check-icon {
+  background: var(--st-first);
+  color: #05351f;
+}
+.is-retry .fb-check-icon {
+  background: var(--st-solved);
+  color: #071a33;
+}
+.fb-check-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.fb-picked {
+  color: var(--panel-muted);
+}
+
+.fb-explain,
+.fb-misc,
+.fb-extra,
+.fb-return,
+.fb-answer {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+.fb-explain {
+  border-color: var(--accent-2);
+  background: rgba(79, 214, 196, 0.12);
+}
+.fb-explain p {
+  margin: 0;
+}
+.fb-misc {
+  border-color: var(--st-solved);
+  background: rgba(127, 184, 255, 0.12);
+}
+.fb-extra {
+  display: flex;
+  gap: 8px;
+  border-color: var(--accent);
+  background: rgba(255, 207, 63, 0.12);
+}
+.fb-extra .ui-icon {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--accent);
+}
+.fb-return {
+  border-color: var(--st-review);
+  background: rgba(255, 143, 107, 0.16);
+  font-weight: 800;
+}
+.fb-answer {
+  border-color: var(--st-first);
+  background: rgba(89, 217, 142, 0.12);
+}
+.fb-answer p {
+  margin: 0;
+}
+.fb-answer-title {
+  color: #a6f3cb;
+  font-weight: 900;
+}
+
+.fb-counter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+.fb-counter .hud-hearts {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--accent-3);
+}
+.fb-counter-note {
+  color: var(--panel-muted);
+}
+.fb-map-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 800;
+}
+.fb-map-note .ui-icon {
+  color: var(--accent-2);
+}
+.fb-map-note .btn {
+  margin-left: auto;
+}
+.fb-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #ffe2a6;
+  font-weight: 700;
+}
+
+/* 좁은 화면: 아래쪽 시트 */
+@media (max-width: 760px) and (orientation: portrait) {
+  .quiz,
+  .feedback {
+    border-radius: 20px 20px 0 0;
+    padding: 12px 14px 0;
+    gap: 10px;
+  }
+  .quiz.is-collapsed {
+    padding: 10px 12px calc(10px + var(--safe-bottom));
+  }
+  .quiz-actions,
+  .fb-actions {
+    margin: 0 -14px;
+    padding: 8px 14px calc(10px + var(--safe-bottom));
+  }
+  .fb-speech .portrait {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+  .quiz-option {
+    min-height: 46px;
+    padding: 6px 10px;
+  }
+}

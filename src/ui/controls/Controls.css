@@ -1,0 +1,196 @@
+/* 이동 안내 막대 · 조향 버튼 · 일시정지 메뉴 · 아이콘 */
+
+.ui-icon {
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+/* ── 이동 안내 ───────────────────────── */
+.travel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px 12px;
+  animation: travel-in 0.25s ease-out;
+}
+@keyframes travel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.travel-caption {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0;
+  font-weight: 700;
+}
+.travel-fast {
+  background: rgba(124, 240, 180, 0.18);
+  color: #b9f7d8;
+}
+.travel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.travel-bar {
+  position: relative;
+  flex: 1 1 auto;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+.travel-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent-3), var(--accent));
+  border-radius: inherit;
+}
+.travel-skip {
+  flex: 0 0 auto;
+}
+
+/* ── 조향 버튼 ───────────────────────── */
+.steer-btn {
+  position: absolute;
+  bottom: calc(16px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  box-shadow: var(--shadow);
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
+}
+.steer-left {
+  left: calc(16px + env(safe-area-inset-left, 0px));
+}
+.steer-right {
+  right: calc(16px + env(safe-area-inset-right, 0px));
+}
+.steer-btn.is-held {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: #fff;
+  transform: scale(0.95);
+}
+.steer-label {
+  line-height: 1;
+}
+
+/* ── 일시정지 ───────────────────────── */
+.pause-backdrop {
+  z-index: 70;
+}
+.pause {
+  width: min(440px, 100%);
+  max-height: calc(100% - 16px);
+  overflow-y: auto;
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: pause-in 0.18s ease-out;
+}
+@keyframes pause-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.pause-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--fs-title);
+}
+.pause-text {
+  margin: 0;
+  color: var(--panel-muted);
+}
+.pause-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pause-actions .btn {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 48px;
+}
+.pause-help summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 800;
+}
+.pause-help .help-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.pause-help .help-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.pause-hint {
+  margin: 0;
+  color: var(--panel-muted);
+}
+
+@media (max-width: 760px) and (orientation: portrait), (max-height: 520px) and (orientation: landscape) {
+  .steer-btn {
+    width: 64px;
+    height: 64px;
+    bottom: calc(12px + var(--safe-bottom));
+  }
+  .steer-left {
+    left: calc(10px + env(safe-area-inset-left, 0px));
+  }
+  .steer-right {
+    right: calc(10px + env(safe-area-inset-right, 0px));
+  }
+  .travel-row {
+    flex-wrap: wrap;
+  }
+  .travel-bar {
+    flex: 1 1 100%;
+  }
+  .travel-skip {
+    flex: 1 1 auto;
+  }
+}

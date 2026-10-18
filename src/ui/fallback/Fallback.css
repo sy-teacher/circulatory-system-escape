@@ -1,0 +1,229 @@
+/* WebGL 안내 + 간소화 학습 모드 무대 */
+
+.webgl-notice {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fff4d6;
+  color: #2b2333;
+  border: 2px solid #f2b705;
+  line-height: 1.55;
+}
+.webgl-notice p {
+  margin: 6px 0;
+}
+.webgl-notice-title {
+  margin: 0 0 4px;
+  font-size: var(--fs-large);
+}
+.webgl-notice-tips {
+  margin: 4px 0 6px;
+  padding-left: 1.3em;
+}
+.webgl-notice-tips li {
+  margin: 2px 0;
+}
+.webgl-notice-alt {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px dashed #c9a640;
+}
+.webgl-notice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.webgl-notice-actions .btn:not(.btn-secondary) {
+  color: #2b2333;
+  border-color: #c9a640;
+  background: #fff;
+}
+
+/* ── 간소화 학습 모드 무대 ─────────────── */
+.simple-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 72px 16px 132px calc(var(--left-w, 0px) + 24px);
+  background: radial-gradient(circle at 50% 45%, #6b2236 0%, #3a1229 55%, #1a0b1f 100%);
+}
+.simple-stage.is-park {
+  background: linear-gradient(180deg, #7cc8f0 0%, #3a6fa8 60%, #22184a 100%);
+}
+.phase-question .simple-stage,
+.phase-feedback .simple-stage {
+  padding-right: calc(var(--right-w, 0px) + 24px);
+}
+
+.simple-card {
+  width: min(460px, 100%);
+  max-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--paper);
+  color: var(--paper-text);
+  box-shadow: var(--shadow);
+}
+.simple-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+.simple-chip {
+  background: #2b2333;
+  color: #fff;
+}
+.simple-sub {
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.simple-where {
+  margin: 0;
+  font-size: var(--fs-base);
+}
+.simple-art {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+.simple-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 34vh;
+  border-radius: 12px;
+}
+.simple-svg-tag {
+  font-size: 10px;
+  font-weight: 700;
+  fill: rgba(43, 35, 51, 0.7);
+}
+.simple-desc {
+  margin: 0;
+  line-height: 1.5;
+}
+.simple-clues {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--paper-line);
+}
+.simple-clues-title {
+  margin: 0 0 4px;
+  font-weight: 800;
+  font-size: var(--fs-small);
+}
+.simple-clues ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.simple-clues li {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1.5px dashed #b8a98f;
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.simple-clues li.is-seen {
+  border-style: solid;
+  border-color: #2e9e63;
+  background: #e3f7ea;
+}
+.simple-clues-help {
+  margin: 4px 0 0;
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.simple-note {
+  margin: 0;
+  color: var(--paper-muted);
+  font-size: 12px;
+}
+
+/* 가벼운 움직임(이동 효과 줄이기에서는 멈춤) */
+.simple-flow {
+  animation: simple-flow 2.4s linear infinite;
+}
+.simple-beat {
+  animation: simple-beat 0.94s ease-in-out infinite;
+}
+.simple-wheel {
+  animation: simple-spin 18s linear infinite;
+}
+@keyframes simple-flow {
+  0% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(10px);
+  }
+}
+@keyframes simple-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0.97);
+  }
+}
+@keyframes simple-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.is-reduced-motion .simple-flow,
+.is-reduced-motion .simple-beat,
+.is-reduced-motion .simple-wheel {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .simple-flow,
+  .simple-beat,
+  .simple-wheel {
+    animation: none;
+  }
+}
+
+/* 세로 휴대폰: 위·아래 패널 사이에 작게 */
+@media (max-width: 760px) and (orientation: portrait) {
+  .simple-stage {
+    align-items: flex-start;
+    padding: calc(60px + env(safe-area-inset-top, 0px)) 8px 100px;
+  }
+  .phase-question .simple-stage,
+  .phase-feedback .simple-stage {
+    padding-right: 8px;
+  }
+  .simple-card {
+    padding: 8px 10px;
+  }
+  .simple-svg {
+    max-height: 22vh;
+  }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .simple-stage {
+    padding-top: 56px;
+    padding-bottom: 96px;
+  }
+  .simple-svg {
+    max-height: 30vh;
+  }
+  .simple-clues,
+  .simple-note {
+    display: none;
+  }
+}

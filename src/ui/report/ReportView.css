@@ -1,0 +1,473 @@
+/* 학습 진단 보고서: 화면에서는 어두운 배경 위의 종이, 인쇄할 때는 보고서만 A4 종이에 */
+
+.report-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 12px 24px;
+  background: rgba(10, 4, 18, 0.78);
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  color: var(--paper-text);
+}
+.report-root.is-large-text {
+  --fs-base: 20px;
+  --fs-small: 16px;
+  --fs-large: 23px;
+  --fs-title: 32px;
+}
+
+.report-dialog {
+  max-width: 900px;
+  margin: 0 auto;
+  outline: none;
+}
+
+/* 도구 막대(화면에서만) */
+.report-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 0 -12px 12px;
+  padding: 10px 12px;
+  background: var(--panel-bg-solid);
+  color: var(--panel-text);
+  border-bottom: 1px solid var(--panel-border);
+  border-radius: 0 0 16px 16px;
+}
+.report-toolbar-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+}
+.report-toolbar-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+.report-copy-msg {
+  flex-basis: 100%;
+  margin: 0;
+  min-height: 0;
+  color: var(--accent);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.report-copy-msg:empty {
+  display: none;
+}
+
+.report-sheet {
+  padding: 22px 26px 18px;
+  border-radius: 18px;
+  background: var(--paper);
+  color: var(--paper-text);
+  box-shadow: var(--shadow);
+}
+.report-sheet + .report-sheet {
+  margin-top: 12px;
+}
+
+.report-fallback textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--paper-line);
+  background: #fff;
+  color: var(--paper-text);
+  font-size: var(--fs-small);
+  resize: vertical;
+}
+.report-fallback-label {
+  font-weight: 700;
+}
+
+.report-head {
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--paper-line);
+}
+.report-kicker {
+  margin: 0;
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.report-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 4px;
+  font-size: var(--fs-title);
+  line-height: 1.25;
+}
+.report-meta {
+  margin: 0;
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.report-lead {
+  margin: 8px 0 0;
+}
+
+.report-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 10px;
+  border-radius: 999px;
+  border: 1px solid #b8a98f;
+  background: #fff;
+  color: var(--paper-text);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+
+.report-section {
+  padding: 14px 0 4px;
+  border-bottom: 1px dashed var(--paper-line);
+}
+.report-section:last-of-type {
+  border-bottom: 0;
+}
+.report-section h2 {
+  margin: 0 0 8px;
+  font-size: var(--fs-large);
+}
+.report-h3 {
+  margin: 14px 0 6px;
+  font-size: var(--fs-base);
+}
+
+.report-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+.report-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--paper-line);
+  break-inside: avoid;
+}
+.report-stat-label {
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.report-stat-value {
+  font-size: 26px;
+  line-height: 1.1;
+}
+.report-stat-sub {
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.report-status-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.report-status-counts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.report-legend {
+  margin-bottom: 8px;
+}
+.report-map-section .cmap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.report-note {
+  margin: 6px 0 0;
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+.report-note.is-strong {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #fff3c4;
+  color: var(--paper-text);
+  font-weight: 700;
+}
+.report-empty {
+  margin: 4px 0 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px dashed var(--paper-line);
+}
+
+/* 표 */
+.report-table-wrap {
+  overflow-x: auto;
+}
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: var(--fs-small);
+}
+.report-table th,
+.report-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--paper-line);
+  text-align: left;
+  vertical-align: middle;
+}
+.report-table th {
+  background: #f6efe3;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.report-table td:first-child {
+  white-space: nowrap;
+  font-weight: 700;
+}
+.report-table tr {
+  break-inside: avoid;
+}
+.report-flag {
+  display: inline-block;
+  margin: 2px 0 0 6px;
+  padding: 1px 8px;
+  border-radius: 8px;
+  border: 1.5px dashed #d26a12;
+  background: #fff2e6;
+  color: #7a3a00;
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+
+/* 카드 */
+.report-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.report-card {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--paper-line);
+  border-left: 6px solid var(--st-unchecked);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.report-card.is-needs-review {
+  border-left-color: var(--st-review);
+}
+.report-card.is-wrong-then-solved {
+  border-left-color: var(--st-solved);
+}
+.report-card.is-concept {
+  border-left-color: #138a7a;
+}
+.report-card p {
+  margin: 4px 0;
+}
+.report-card-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+.report-card-title {
+  margin: 0;
+  font-size: var(--fs-base);
+}
+.report-prompt strong,
+.report-rethink strong,
+.report-recheck strong,
+.report-related strong {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #2b2333;
+  color: #fff;
+  font-size: var(--fs-small);
+}
+.report-related ul {
+  margin: 4px 0;
+  padding-left: 1.3em;
+}
+.report-dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 12px;
+  margin: 8px 0 0;
+}
+.report-dl dt {
+  color: var(--paper-muted);
+  font-weight: 800;
+  font-size: var(--fs-small);
+  padding-top: 2px;
+}
+.report-dl dd {
+  margin: 0;
+}
+.report-answer.is-no {
+  text-decoration: underline wavy #d26a12 1px;
+  text-underline-offset: 4px;
+}
+.report-answer-mark {
+  font-size: var(--fs-small);
+  font-weight: 800;
+  color: var(--paper-muted);
+}
+.report-hidden-answer {
+  color: var(--paper-muted);
+  font-style: italic;
+}
+.report-feedback {
+  margin: 0 0 4px;
+}
+.report-rethink-list {
+  margin: 0;
+  padding-left: 1.2em;
+}
+.report-mark {
+  font-weight: 800;
+}
+.report-mark.is-ok {
+  color: #13633a;
+}
+.report-mark.is-review {
+  color: #8a3a00;
+}
+
+.report-list {
+  margin: 4px 0 8px;
+  padding-left: 1.3em;
+}
+.report-list li {
+  margin: 3px 0;
+}
+
+.report-foot {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 2px solid var(--paper-line);
+  color: var(--paper-muted);
+  font-size: var(--fs-small);
+}
+
+@media (max-width: 560px) {
+  .report-root {
+    padding: 0 6px 16px;
+  }
+  .report-toolbar {
+    margin: 0 -6px 8px;
+  }
+  .report-toolbar-btns {
+    margin-left: 0;
+  }
+  .report-sheet {
+    padding: 14px 12px 12px;
+    border-radius: 14px;
+  }
+  .report-dl {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .report-dl dd {
+    margin-bottom: 6px;
+  }
+}
+
+/* ── 인쇄 / PDF ───────────────────────────── */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm 12mm 14mm;
+  }
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  body > *:not(.report-root) {
+    display: none !important;
+  }
+  .report-root {
+    --paper: #fff;
+    --paper-text: #000;
+    --paper-muted: #333;
+    --paper-line: #c8c8c8;
+    position: static !important;
+    inset: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: #fff !important;
+    color: #000;
+    font-size: 11pt;
+  }
+  .report-dialog {
+    max-width: none;
+  }
+  .report-toolbar,
+  .report-root .no-print {
+    display: none !important;
+  }
+  .report-sheet {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+  .report-section {
+    break-inside: auto;
+  }
+  .report-section h2,
+  .report-h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .report-card,
+  .report-stat,
+  .report-table tr,
+  .report-map-section .cmap,
+  .explain-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .report-map-section .cmap {
+    max-width: 170mm;
+    margin: 0 auto;
+  }
+  .report-table-wrap {
+    overflow: visible;
+  }
+  .report-root .status-badge,
+  .report-root .cmap,
+  .report-root .report-flag,
+  .report-root .report-note.is-strong {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

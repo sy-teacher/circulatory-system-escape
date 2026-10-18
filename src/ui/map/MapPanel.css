@@ -1,0 +1,142 @@
+/* 지도 창 */
+
+.map-backdrop {
+  z-index: 60;
+}
+
+.map-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(1120px, 100%);
+  max-height: calc(100% - 4px);
+  padding: 14px 16px 12px;
+  outline: none;
+}
+
+.map-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding-bottom: 8px;
+}
+.map-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--fs-large);
+}
+.map-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+}
+.map-close {
+  margin-left: auto;
+}
+
+.map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 1fr);
+  gap: 14px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+.map-col-map,
+.map-col-list {
+  min-width: 0;
+}
+
+/* 좁은 화면: 지도는 가로로 밀어 볼 수 있게(글자가 너무 작아지지 않도록) */
+.map-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-radius: 16px;
+}
+.map-scroll > .cmap {
+  min-width: 480px;
+}
+
+.map-tip {
+  margin: 6px 2px 0;
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+
+.map-section + .map-section {
+  margin-top: 12px;
+}
+.map-section-title {
+  margin: 0 0 6px;
+  font-size: var(--fs-base);
+}
+
+.map-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.map-step {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.map-step-name {
+  flex: 1 1 160px;
+  min-width: 0;
+  font-weight: 700;
+  color: var(--panel-muted);
+}
+.map-step.is-known .map-step-name {
+  color: var(--panel-text);
+}
+.map-here {
+  background: rgba(255, 207, 63, 0.2);
+  color: var(--accent);
+}
+
+.map-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+}
+.map-keys {
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+}
+
+@media (max-width: 860px) {
+  .map-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .map-backdrop {
+    padding: 6px;
+  }
+  .map-dialog {
+    padding: 10px 10px 8px;
+  }
+  .map-keys {
+    display: none;
+  }
+  .map-foot {
+    justify-content: flex-end;
+  }
+}

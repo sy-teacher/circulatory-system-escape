@@ -1,0 +1,513 @@
+/* 마지막 활동 · 개념 재확인 · 탈출 화면 */
+
+.finale-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(64px + env(safe-area-inset-top, 0px)) 12px calc(16px + var(--safe-bottom));
+  background: radial-gradient(ellipse at 50% 40%, rgba(29, 18, 46, 0.35) 0%, rgba(18, 9, 29, 0.78) 75%);
+  /* 빈 곳은 아래의 메뉴(HUD)·3D 화면으로 그대로 전달한다 */
+  pointer-events: none;
+}
+.finale-layer > * {
+  pointer-events: auto;
+}
+
+.finale-panel {
+  width: min(1080px, 100%);
+  margin: auto 0;
+  padding: 16px 18px;
+}
+.finale-panel.recheck {
+  width: min(640px, 100%);
+}
+
+.finale-head {
+  margin-bottom: 10px;
+}
+.finale-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: var(--fs-large);
+  outline: none;
+}
+.finale-prompt {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.finale-safe {
+  display: inline-block;
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(79, 214, 196, 0.16);
+  border: 1px solid rgba(79, 214, 196, 0.45);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.finale-hint {
+  margin: 0;
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+}
+.finale-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.finale-next {
+  min-width: 140px;
+}
+
+/* ── 범위 활동 ───────────────────────── */
+.activity-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+.activity-map,
+.activity-side {
+  min-width: 0;
+}
+.activity-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.activity-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.activity-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 14px 14px 6px 6px;
+  border: 2px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--panel-text);
+  font-weight: 800;
+  cursor: pointer;
+}
+.activity-tab.is-active {
+  background: var(--paper);
+  color: var(--paper-text);
+  border-color: var(--accent);
+  box-shadow: 0 3px 0 var(--accent);
+}
+.activity-tab-swatch {
+  display: inline-block;
+  width: 22px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #138a7a;
+  background: repeating-linear-gradient(45deg, rgba(19, 138, 122, 0.6) 0 2px, rgba(19, 138, 122, 0.12) 2px 6px);
+}
+.activity-tab.is-systemic .activity-tab-swatch {
+  border-color: #d26a12;
+  background: radial-gradient(circle, rgba(210, 106, 18, 0.7) 1.6px, rgba(210, 106, 18, 0.1) 2px) 0 0 / 7px 7px;
+}
+.activity-tab-count {
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.12);
+  font-size: var(--fs-small);
+}
+.activity-howto {
+  margin: 0 0 6px;
+  font-size: var(--fs-small);
+  color: var(--panel-muted);
+}
+.activity-howto strong {
+  color: var(--accent);
+}
+.activity-tabpanel .cmap {
+  min-width: 0;
+}
+.activity-chips {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.activity-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--panel-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+.activity-chip.is-pressed {
+  border-style: solid;
+  border-color: var(--accent);
+  background: rgba(255, 207, 63, 0.18);
+}
+.activity-chip-tag {
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: var(--fs-small);
+  color: #1b1124;
+}
+.activity-chip-tag.is-pulmonary {
+  background: #c9f0ea;
+}
+.activity-chip-tag.is-systemic {
+  background: #ffe2c7;
+}
+
+.activity-picked {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+}
+.activity-picked h3 {
+  margin: 0 0 6px;
+  font-size: var(--fs-base);
+}
+.activity-picked-row {
+  margin: 4px 0;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border-left: 5px solid #138a7a;
+  background: rgba(255, 255, 255, 0.04);
+  line-height: 1.5;
+}
+.activity-picked-row.is-systemic {
+  border-left-color: #d26a12;
+  border-left-style: dotted;
+}
+.activity-picked-row.is-active {
+  background: rgba(255, 207, 63, 0.12);
+}
+.activity-picked-row strong {
+  display: block;
+  font-size: var(--fs-small);
+}
+
+.activity-feedback {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 209, 102, 0.6);
+}
+.activity-feedback-lead {
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+.activity-feedback ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.activity-feedback li {
+  margin: 4px 0;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+}
+.activity-feedback li.is-ok strong {
+  color: var(--st-first);
+}
+.activity-feedback li.is-retry strong {
+  color: var(--st-hint);
+}
+.activity-fb-line {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-small);
+}
+
+.activity-result {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(89, 217, 142, 0.18);
+  border: 2px solid var(--st-first);
+  font-weight: 800;
+}
+.activity-range {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px dashed #3fbfab;
+}
+.activity-range.is-systemic {
+  border-style: dotted;
+  border-color: #f0954a;
+}
+.activity-range h3 {
+  margin: 0 0 4px;
+  font-size: var(--fs-base);
+}
+.activity-range p {
+  margin: 0;
+  font-weight: 700;
+}
+.activity-range .activity-range-note {
+  margin-top: 4px;
+  font-weight: 500;
+  font-size: var(--fs-small);
+  color: var(--panel-muted);
+}
+
+/* ── 개념 재확인 ──────────────────────── */
+.recheck-progress {
+  margin: 0 0 2px;
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+.recheck-progress strong {
+  color: var(--accent);
+}
+.recheck-statement {
+  margin: 6px 0 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--paper-text);
+  font-size: var(--fs-large);
+  font-weight: 800;
+  line-height: 1.5;
+}
+.recheck-ox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.recheck-btn {
+  min-height: 64px;
+  font-size: var(--fs-large);
+}
+.recheck-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+  font-size: 24px;
+  font-weight: 900;
+}
+.recheck-btn.is-x .recheck-symbol {
+  border-radius: 8px;
+}
+.recheck-btn.is-chosen {
+  border-color: var(--accent);
+  background: rgba(255, 207, 63, 0.2);
+  opacity: 1;
+}
+.recheck-result {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 2px solid var(--st-first);
+}
+.recheck-result.is-retry {
+  border-color: var(--st-hint);
+}
+.recheck-result p {
+  margin: 4px 0;
+}
+.recheck-verdict {
+  font-weight: 800;
+}
+.recheck-concept strong {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: var(--fs-small);
+}
+
+/* ── 탈출 화면 ────────────────────────── */
+.escape-layer {
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 236, 200, 0.18) 0%, rgba(18, 9, 29, 0.7) 80%);
+}
+.escape {
+  width: min(860px, 100%);
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.escape-holder {
+  position: relative;
+  width: 100%;
+  padding: 0 34px;
+  transform: rotate(-1.6deg);
+  animation: escape-float 4.5s ease-in-out infinite;
+}
+.escape-paper {
+  position: relative;
+  padding: 12px 14px 10px;
+  border-radius: 6px;
+  background: linear-gradient(175deg, #fffdf6 0%, var(--paper) 60%, #f6ecd8 100%);
+  color: var(--paper-text);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(120, 100, 70, 0.25);
+}
+.escape-paper::before {
+  /* 접힌 자국 */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 49.6%, rgba(120, 100, 70, 0.12) 50%, transparent 50.4%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.escape-paper .cmap {
+  border: 0;
+  padding: 4px 0 0;
+  background: transparent;
+}
+.escape-paper-title {
+  margin: 0;
+  font-weight: 900;
+  font-size: var(--fs-base);
+  text-align: center;
+}
+
+.escape-hand {
+  position: absolute;
+  z-index: 2;
+  bottom: 14%;
+  width: 78px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+.escape-hand.is-left {
+  left: -6px;
+}
+.escape-hand.is-right {
+  right: -6px;
+  transform: scaleX(-1);
+}
+.escape-skin {
+  fill: #f2c6a4;
+  stroke: #d9a17d;
+  stroke-width: 2;
+}
+.escape-skin.is-thumb {
+  fill: #f5cfb0;
+}
+.escape-sleeve {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.escape-message {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  text-align: center;
+}
+.escape-main {
+  margin: 0;
+  font-size: var(--fs-large);
+  font-weight: 900;
+  line-height: 1.45;
+}
+.escape-warning {
+  margin: 4px 0 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+.escape-joke {
+  margin: 6px 0 0;
+  font-size: var(--fs-small);
+  color: var(--panel-muted);
+}
+
+.escape-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+@keyframes escape-float {
+  0%,
+  100% {
+    transform: rotate(-1.6deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-1.2deg) translateY(-4px);
+  }
+}
+.is-reduced-motion .escape-holder {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .escape-holder {
+    animation: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .activity-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .activity-chips {
+    display: flex;
+  }
+}
+
+@media (max-width: 560px) {
+  .finale-layer {
+    padding: calc(58px + env(safe-area-inset-top, 0px)) 6px calc(10px + var(--safe-bottom));
+  }
+  .finale-panel {
+    padding: 12px 10px;
+  }
+  .escape-holder {
+    padding: 0 18px;
+  }
+  .escape-hand {
+    width: 46px;
+  }
+  .escape-hand.is-left {
+    left: -8px;
+  }
+  .escape-hand.is-right {
+    right: -8px;
+  }
+  .escape-actions .btn {
+    flex: 1 1 100%;
+  }
+  .recheck-btn {
+    min-height: 56px;
+  }
+}

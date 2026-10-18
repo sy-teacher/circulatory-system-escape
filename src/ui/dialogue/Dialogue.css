@@ -1,0 +1,184 @@
+/* 대화 상자(화면 아래) + 초상화 */
+
+.portrait {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(160deg, #ffe7ee, #ffd6c8);
+}
+.portrait svg {
+  display: block;
+}
+.portrait--student {
+  background: linear-gradient(160deg, #e4ecff, #c8d6ff);
+}
+.portrait--friend {
+  background: linear-gradient(160deg, #ddfaf3, #bcefe4);
+}
+.portrait--narration {
+  background: linear-gradient(160deg, #f5efff, #e0d4fb);
+}
+
+.dlg {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  cursor: pointer;
+  animation: dlg-in 0.2s ease-out;
+}
+@keyframes dlg-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dlg-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dlg-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dlg-name {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 2px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: var(--fs-large);
+  background: var(--accent-3);
+  color: #2a0610;
+}
+.dlg-name--student {
+  background: #a9bdff;
+  color: #0e1a40;
+}
+.dlg-name--friend {
+  background: var(--accent-2);
+  color: #062a26;
+}
+.dlg-name--narration {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--panel-muted);
+  font-size: var(--fs-base);
+  font-weight: 700;
+}
+
+.dlg-count {
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.dlg-tools {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.dlg .dlg-tool {
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.dlg-text {
+  display: grid;
+  margin: 0;
+  font-size: var(--fs-large);
+  line-height: 1.6;
+  min-height: 3.2em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.dlg-text > span {
+  grid-area: 1 / 1;
+}
+.dlg-ghost {
+  visibility: hidden;
+}
+.dlg.is-narration .dlg-text {
+  font-style: italic;
+  color: #f1e8ff;
+}
+
+.dlg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  /* 긴 대사로 상자가 스크롤되어도 '다음' 버튼은 항상 보이게 아래에 고정 */
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding-top: 6px;
+  background: var(--panel-bg-solid);
+}
+.dlg-next {
+  min-width: 120px;
+}
+
+/* 접힌 대화: 작은 탭 */
+.dlg-reopen {
+  align-self: flex-start;
+  background: var(--panel-bg);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+/* 좁은 화면: 초상화와 글자를 줄이고 도구 버튼은 아이콘만 */
+@media (max-width: 760px) and (orientation: portrait), (max-height: 520px) and (orientation: landscape) {
+  .dlg {
+    gap: 10px;
+    padding: 10px 12px 10px;
+    max-height: max(40vh, 184px);
+  }
+  .dlg .portrait {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    border-width: 2px;
+  }
+  .dlg-name {
+    font-size: var(--fs-base);
+    min-height: 28px;
+    padding: 1px 12px;
+  }
+  .dlg-text {
+    font-size: max(16px, var(--fs-base));
+    min-height: 3em;
+  }
+  .dlg-tool-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .dlg .dlg-tool {
+    min-width: 44px;
+    padding: 6px 8px;
+  }
+}

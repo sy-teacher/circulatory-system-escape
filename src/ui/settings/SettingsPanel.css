@@ -1,0 +1,152 @@
+/* 설정 창 */
+
+.settings-backdrop {
+  z-index: 90;
+}
+
+.settings {
+  width: min(520px, 100%);
+  max-height: calc(100% - 8px);
+  overflow-y: auto;
+  padding: 18px 20px 16px;
+  outline: none;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.settings-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--fs-large);
+}
+
+.settings-group {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--panel-border);
+}
+.settings-group-title {
+  margin: 0 0 4px;
+  font-size: var(--fs-small);
+  color: var(--panel-muted);
+  letter-spacing: 0.02em;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0;
+}
+.settings-row-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.settings-label {
+  font-weight: 800;
+  cursor: pointer;
+}
+.settings-desc {
+  margin: 2px 0 0;
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.settings-output {
+  margin-left: 8px;
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.settings-volume {
+  flex-wrap: wrap;
+}
+.settings-range {
+  flex: 1 1 200px;
+  min-width: 160px;
+  height: 32px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* 켜기/끄기 스위치(체크박스 + 글자 '켜짐/꺼짐') */
+.settings-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.settings-switch input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.settings-switch-track {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--panel-border);
+  transition: background 0.15s ease;
+}
+.settings-switch-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+.settings-switch input:checked + .settings-switch-track {
+  background: var(--accent-2);
+  border-color: #9df0e4;
+}
+.settings-switch input:checked + .settings-switch-track .settings-switch-thumb {
+  transform: translateX(22px);
+}
+.settings-switch input:focus-visible + .settings-switch-track {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.settings-switch-text {
+  min-width: 2.6em;
+  font-size: var(--fs-small);
+  font-weight: 800;
+}
+
+.settings-foot {
+  margin: 10px 0 0;
+  color: var(--panel-muted);
+  font-size: var(--fs-small);
+}
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+@media (max-width: 420px) {
+  .settings {
+    padding: 14px 14px 12px;
+  }
+  .settings-row {
+    gap: 10px;
+  }
+}

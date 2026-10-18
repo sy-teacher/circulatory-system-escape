@@ -1,0 +1,289 @@
+/* ─────────────────────────────────────────────────────────────
+   공통 디자인 토큰과 기본 컴포넌트 클래스
+   UI 컴포넌트는 이 토큰을 사용하고, 필요한 스타일은 각자 CSS 파일에 추가한다.
+   외부 글꼴을 불러오지 않는다(오프라인·학교망 대비).
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --font: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
+  --fs-base: 17px;
+  --fs-small: 14px;
+  --fs-large: 20px;
+  --fs-title: 28px;
+
+  /* 패널(어두운 남보라 바탕 위 밝은 글자: 대비 7:1 이상) */
+  --panel-bg: rgba(29, 18, 46, 0.92);
+  --panel-bg-solid: #1d122e;
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --panel-text: #fff8f2;
+  --panel-muted: #d9cde6;
+  --panel-radius: 18px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  /* 강조색 */
+  --accent: #ffcf3f; /* 노랑: 주요 버튼 */
+  --accent-text: #2a1600;
+  --accent-2: #4fd6c4; /* 청록: 보조 */
+  --accent-3: #ff7a8a; /* 분홍: 심장 테마 */
+  --focus: #7cf0ff;
+
+  /* 학습 상태(색 + 아이콘 + 글자로 함께 표시) */
+  --st-first: #59d98e;
+  --st-hint: #ffd166;
+  --st-solved: #7fb8ff;
+  --st-review: #ff8f6b;
+  --st-unchecked: #a99bb8;
+
+  /* 산소 기호색(이해를 돕는 색 — 실제 혈액 색 아님) */
+  --o2-rich: #e8394a;
+  --o2-poor: #8a4fd1;
+
+  /* 종이(결과 보고서·지도) */
+  --paper: #fffaf1;
+  --paper-text: #2b2333;
+  --paper-muted: #5e5468;
+  --paper-line: #e6dccb;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: #12091d;
+  color: var(--panel-text);
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+.app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app.is-large-text {
+  --fs-base: 20px;
+  --fs-small: 16px;
+  --fs-large: 23px;
+  --fs-title: 32px;
+  font-size: var(--fs-base);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── 버튼 ───────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 2px solid var(--panel-border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--panel-text);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease;
+  touch-action: manipulation;
+  user-select: none;
+}
+.btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--accent);
+  border-color: #ffe48a;
+  color: var(--accent-text);
+  box-shadow: 0 4px 0 #c99a12;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #ffd95e;
+}
+.btn-secondary {
+  background: var(--accent-2);
+  border-color: #9df0e4;
+  color: #062a26;
+  box-shadow: 0 4px 0 #2a9c8d;
+}
+.btn-danger {
+  background: #ff6b6b;
+  border-color: #ffa3a3;
+  color: #2a0000;
+}
+.btn-ghost {
+  background: transparent;
+}
+.btn-icon {
+  min-width: 44px;
+  padding: 8px;
+  border-radius: 12px;
+}
+.btn-small {
+  min-height: 36px;
+  padding: 6px 12px;
+  font-size: var(--fs-small);
+}
+
+/* ── 패널 ───────────────────────────── */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--shadow);
+  color: var(--panel-text);
+  backdrop-filter: blur(6px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: var(--fs-small);
+  font-weight: 700;
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 0 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.85em;
+  text-align: center;
+}
+
+/* 학습 상태 배지 */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: var(--fs-small);
+  color: #1b1124;
+}
+.status-first-correct {
+  background: var(--st-first);
+}
+.status-hint-correct {
+  background: var(--st-hint);
+}
+.status-wrong-then-solved {
+  background: var(--st-solved);
+}
+.status-needs-review {
+  background: var(--st-review);
+}
+.status-unchecked {
+  background: var(--st-unchecked);
+}
+
+/* 모달 배경 */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 4, 18, 0.66);
+}
+
+/* 3D 관찰 지점 버튼(drei Html) */
+.hotspot-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 900;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(255, 207, 63, 0.35), 0 6px 16px rgba(0, 0, 0, 0.4);
+  animation: hotspot-pulse 1.6s ease-in-out infinite;
+}
+.hotspot-btn.is-done {
+  background: #7cf0b4;
+  color: #05351f;
+  animation: none;
+}
+@keyframes hotspot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+.is-reduced-motion .hotspot-btn,
+.is-reduced-motion * {
+  animation-duration: 0.001s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot-btn {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --fs-base: 16px;
+    --fs-small: 13px;
+    --fs-large: 18px;
+    --fs-title: 24px;
+  }
+}

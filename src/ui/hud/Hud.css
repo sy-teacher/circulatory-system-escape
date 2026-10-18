@@ -1,0 +1,196 @@
+/* 상단 HUD */
+
+.hud-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+
+.hud-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  background: var(--panel-bg);
+  border-color: var(--panel-border);
+  box-shadow: var(--shadow);
+}
+.hud-btn[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+.hud-btn-label {
+  white-space: nowrap;
+}
+.hud-kbd {
+  margin-left: 2px;
+}
+/* 넓은 화면이 아니면 아이콘만(이름은 aria-label·title) */
+@media (max-width: 1439px) {
+  .hud-btn-label,
+  .hud-kbd {
+    display: none;
+  }
+}
+
+/* 위치 글자: 넓은 화면은 정보 패널 안, 좁은 화면은 버튼 줄 왼쪽 */
+.hud-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-weight: 900;
+  font-size: var(--fs-large);
+}
+.hud-loc .ui-icon {
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+.hud-loc-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hud-loc--top {
+  display: none;
+}
+
+.hud-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  flex: 0 0 auto;
+}
+.hud-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.hud-row--main {
+  flex-wrap: nowrap;
+}
+.hud-progress {
+  font-weight: 800;
+  color: var(--panel-muted);
+  white-space: nowrap;
+}
+.hud-compact-toggle {
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.hud-lives {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.hud-hearts {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--accent-3);
+}
+.ui-heart.is-empty {
+  color: rgba(255, 255, 255, 0.6);
+}
+.hud-wrong {
+  font-weight: 700;
+}
+.hud-wrong strong {
+  font-size: var(--fs-large);
+  font-variant-numeric: tabular-nums;
+}
+.hud-remaining {
+  color: var(--panel-muted);
+  font-weight: 600;
+}
+.hud-rule {
+  margin: 0;
+  color: var(--panel-muted);
+}
+
+.hud-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.hud-chips .chip {
+  font-size: max(14px, var(--fs-small));
+}
+.chip-note {
+  background: rgba(79, 214, 196, 0.16);
+  color: #c4f6ee;
+}
+
+/* 간단히 보기: 규칙 문장과 기록 지표는 숨기고, 학습용 표시(크기·시각화 안내)는 남긴다 */
+.hud-info.is-compact .hud-rule,
+.hud-info.is-compact .chip-record,
+.hud-info.is-compact .hud-remaining {
+  display: none;
+}
+
+/* 조작 방법 말풍선 */
+.help-wrap {
+  position: relative;
+}
+.help-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 5;
+  width: min(320px, calc(100vw - 24px));
+  padding: 12px 14px;
+}
+.help-title {
+  margin: 0 0 6px;
+  font-weight: 900;
+}
+.help-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.help-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.help-keys {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* 좁은 화면 */
+@media (max-width: 760px) and (orientation: portrait), (max-height: 520px) and (orientation: landscape) {
+  .hud-wide-only {
+    display: none !important;
+  }
+  .hud-loc--top {
+    display: inline-flex;
+    margin-right: auto;
+    min-height: 44px;
+    padding: 6px 12px;
+    border-radius: 14px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: var(--shadow);
+    font-size: var(--fs-base);
+  }
+  .hud-loc--info {
+    display: none;
+  }
+  .hud-info {
+    padding: 8px 10px;
+    gap: 4px;
+  }
+  .hud-hearts .ui-heart {
+    width: 20px;
+    height: 20px;
+  }
+}
