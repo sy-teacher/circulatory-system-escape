@@ -2,7 +2,7 @@ import type { DialogueLine } from './types';
 
 // ─────────────────────────────────────────────────────────────
 //  이야기 대사. 교사가 자유롭게 고칠 수 있다.
-//  speaker: suyeon(수연쌤) · student(나) · friend(친구 지우) · narration(해설)
+//  speaker: suyeon(수연쌤) · student(나) · friend(친구 민규) · narration(해설)
 //  mood(수연쌤 표정): smile(기본 웃음) · open(눈 뜬 정면) · cheer(활짝 웃음)
 //                     surprised(놀람) · wink(윙크) · worried(걱정)
 // ─────────────────────────────────────────────────────────────
@@ -10,7 +10,7 @@ import type { DialogueLine } from './types';
 export const SPEAKER_NAMES = {
   suyeon: '수연쌤',
   student: '나',
-  friend: '지우',
+  friend: '민규',
   narration: '',
 } as const;
 
@@ -26,14 +26,14 @@ export const INTRO_PARK: DialogueLine[] = [
 /** 혈액 속에서 깨어남 */
 export const INTRO_WAKE: DialogueLine[] = [
   { speaker: 'narration', text: '…쿵, 쿵. 부드러운 박동 소리가 들린다.' },
-  { speaker: 'student', text: '여긴… 어디지? 지우는? 그리고 이건… 탐사선?' },
+  { speaker: 'student', text: '여긴… 어디지? 민규는? 그리고 이건… 탐사선?' },
   { speaker: 'suyeon', mood: 'cheer', text: '일어났구나! 놀라지 마. 나야, 수연쌤.' },
   { speaker: 'student', text: '수연쌤이 이번 수업 열심히 안 들으면 수학여행에서 길을 잃을 수도 있다고 했는데… 진짜였다니.' },
   { speaker: 'suyeon', mood: 'wink', text: '후후. 우리는 아주 작아져서 혈액 속을 달리는 탐사선에 타고 있어.' },
   { speaker: 'suyeon', mood: 'open', text: '돌아가는 방법은 하나야. 주변을 관찰하고 우리가 어디에 있는지 알아내는 거지.' },
   { speaker: 'suyeon', mood: 'smile', text: '외운 순서를 떠올리기 전에, 여기에 어떤 단서가 있는지 살펴봐.' },
   { speaker: 'suyeon', mood: 'open', text: '화면을 드래그하면 주변을 둘러볼 수 있어. 반짝이는 관찰 지점을 누르면 확대해서 볼 수 있고.' },
-  { speaker: 'suyeon', mood: 'smile', text: '단서를 2개 이상 모으면 "추론하기"를 눌러. 위치와 근거를 함께 골라야 해.' },
+  { speaker: 'suyeon', mood: 'smile', text: '관찰 단서를 모두 확인하면 "추론하기"를 눌러. 위치와 근거를 함께 골라야 해.' },
 ];
 
 export function introRuleLine(maxWrong: number): DialogueLine {
@@ -94,22 +94,21 @@ export const ESCAPE_LINES: DialogueLine[] = [
 export const ESCAPE_MESSAGE = {
   main: '탈출을 축하합니다. 틀린 부분은 오답노트 작성하고 공부하세요.',
   warning: '*주의사항: 이 일을 친구들에게 말하면 오답노트 10번씩 써야 합니다…',
-  joke: '(이야기 속 수연쌤의 농담이에요. 실제로 반복해서 쓰지 않아도 됩니다.)',
 };
 
 /** 마지막 30초 설명 활동 */
 export const EXPLAIN_ACTIVITY = {
-  question: '혈액은 심장과 폐, 온몸을 어떤 순서로 이동하며, 각 순환에서 산소의 양은 어떻게 달라질까요?',
+  question: '혈액은 심장과 허파, 온몸을 어떤 순서로 이동하며, 각 순환에서 산소의 양은 어떻게 달라질까요?',
   starters: [
     '혈액은 좌심실에서 출발해 ___을(를) 지나 온몸의 모세혈관으로 가요.',
     '온몸의 모세혈관에서 산소는 ___(으)로 이동해서, 혈액은 산소가 ___ 혈액이 돼요.',
-    '대정맥을 지나 ___(으)로 들어온 혈액은 우심실에서 ___을(를) 통해 폐로 가요.',
-    '폐의 모세혈관에서 산소가 ___(으)로 들어와서, 혈액은 산소가 ___ 혈액이 돼요.',
+    '대정맥을 지나 ___(으)로 들어온 혈액은 우심실에서 ___을(를) 통해 허파로 가요.',
+    '허파의 모세혈관에서 산소가 ___(으)로 들어와서, 혈액은 산소가 ___ 혈액이 돼요.',
     '폐정맥을 지나 ___(으)로 들어온 혈액은 다시 좌심실로 가요.',
   ],
   checklist: [
     '온몸순환과 허파순환의 순서를 모두 말했다.',
-    '산소가 적어지는 곳(온몸의 모세혈관)과 풍부해지는 곳(폐의 모세혈관)을 말했다.',
+    '산소가 적어지는 곳(온몸의 모세혈관)과 풍부해지는 곳(허파의 모세혈관)을 말했다.',
     '동맥과 정맥을 심장 기준(나감·들어옴)으로 설명했다.',
     '판막이 역류를 막는다는 점을 말했다.',
   ],

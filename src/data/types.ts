@@ -85,7 +85,6 @@ export interface RouteStep {
   stop: number;
   questionId: string;
   clues: Clue[];
-  minClues: number;
   /** 이동 중 화면에 표시하는 짧은 설명 */
   travelCaption: string;
   arrival: DialogueLine[];

@@ -2,7 +2,7 @@
 // 작은 동맥이 갈라지며 가늘어져 모세혈관이 된다. 아주 얇은 반투명 벽 너머로 몸의 세포(근육 세포처럼 길쭉함)가 빽빽하다.
 // 적혈구는 한 줄로, 모양을 살짝 바꾸며 지나가고 혈관 밖으로 나가지 않는다.
 // 학습용 시각화: 산소·영양소는 혈액 → 세포, 이산화탄소·노폐물은 세포 → 혈액. (탐사선·혈관 크기는 학습용으로 조정)
-// ※ 이 공간에는 정답 장소 이름을 쓰지 않는다. 공기 주머니도 없다.
+// ※ 이 공간에는 정답 장소 이름을 쓰지 않는다. 허파꽈리도 없다.
 
 import { useMemo } from 'react';
 import { BloodCells } from '../shared/BloodCells';
@@ -48,7 +48,7 @@ function SystemicCapillaries(props: LocationProps) {
   return (
     <group>
       {/* 아주 얇은 반투명 벽(+ 갈라지고 모이는 가지 혈관) */}
-      <ThinVessels tubes={SYS_TUBES} lowSpec={lowSpec} reduceMotion={reduceMotion} opacity={0.35} />
+      <ThinVessels tubes={SYS_TUBES} lowSpec={lowSpec} reduceMotion={reduceMotion} opacity={0.48} />
 
       {/* 바깥의 몸 세포와 다른 모세혈관 그물 */}
       <TissueCells layout={tissue} lowSpec={lowSpec} />

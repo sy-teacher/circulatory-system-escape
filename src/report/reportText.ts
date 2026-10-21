@@ -11,7 +11,7 @@ function fmtDate(ms: number): string {
 
 export function reportToText(r: Report): string {
   const L: string[] = [];
-  L.push(`《순환계 방탈출: 수연쌤의 혈관 탐험》 학습 진단 보고서 — ${r.title}`);
+  L.push(`《순환계 방탈출: 수연쌤과 혈관 탐험》 학습 진단 보고서 — ${r.title}`);
   L.push(`작성: ${fmtDate(r.generatedAt)} · 탐험 시간 약 ${r.elapsedMinutes}분 · 재시작 ${r.restartCount}회`);
   L.push('');
   L.push(`[핵심 10단계] 해결 ${r.core.solved}/${r.core.total}`);
@@ -38,18 +38,15 @@ export function reportToText(r: Report): string {
       L.push(`  문제: ${it.prompt}`);
       L.push(`  나의 첫 답: ${it.firstAnswerText} / ${it.firstReasonText}`);
       L.push(`  정답: ${it.correctAnswerText ? `${it.correctAnswerText} / ${it.correctReasonText}` : '(해결하면 공개됩니다)'}`);
-      if (it.reasonOnly) L.push('  → 위치는 맞혔지만 근거 확인이 필요함');
-      L.push(`  재도전 결과: ${it.resolved ? `해결함(${it.attempts}번째 시도)` : '아직 해결하지 못함'}`);
+      if (it.explanation) L.push(`  정답 설명: ${it.explanation}`);
     }
   }
   L.push('');
   if (r.conceptGroups.length) {
     L.push('[보충할 개념]');
     for (const g of r.conceptGroups) {
-      L.push(`■ ${g.concept.name}  (관련: ${g.questionLabels.join(', ')})`);
+      L.push(`■ ${g.concept.name}`);
       L.push(`  설명: ${g.concept.explanation}`);
-      L.push(`  다시 생각하기: ${g.concept.rethink}`);
-      if (g.recheck) L.push(`  마지막 재확인: ${g.recheck.correct ? '맞힘' : '다시 확인 필요'}`);
     }
     L.push('');
   }
@@ -62,6 +59,6 @@ export function reportToText(r: Report): string {
     `[허파순환·온몸순환 범위 활동] ${r.activity.attempts === 0 ? '아직 하지 않음' : r.activity.solved ? `완료(${r.activity.firstCorrect ? '처음부터 정답' : '다시 생각한 뒤 해결'})` : '진행 중'}`,
   );
   L.push('');
-  L.push('설명 활동: 혈액은 심장과 폐, 온몸을 어떤 순서로 이동하며, 각 순환에서 산소의 양은 어떻게 달라질까요?');
+  L.push('설명 활동: 혈액은 심장과 허파, 온몸을 어떤 순서로 이동하며, 각 순환에서 산소의 양은 어떻게 달라질까요?');
   return L.join('\n');
 }

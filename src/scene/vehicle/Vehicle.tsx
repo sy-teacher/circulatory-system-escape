@@ -36,6 +36,10 @@ import {
 
 export interface VehicleProps {
   location: LocationId;
+  /** 관찰 중에는 차체를 낮추고 작게 표시한다. */
+  observing: boolean;
+  /** 외부 단서 확대 중에는 차체가 관찰 대상을 가리지 않게 숨긴다. */
+  clearView: boolean;
   /** 지금 관찰할 수 있는 계기판 관찰 지점(현재 단계 단서 중 DASHBOARD_ANCHORS에 있는 것) */
   activeDashboardAnchors: string[];
   observedAnchors: string[];
@@ -119,8 +123,10 @@ function createHeartGeometry(): ExtrudeGeometry {
   return g;
 }
 
-/** 계기판 패널(운전석 앞, 운전자 눈을 향해 기울어짐) */
-const PANEL_POS: [number, number, number] = [-0.38, 0.72, -0.4];
+/** 계기판은 앞유리·보닛보다 운전자 쪽에 둔다. */
+const PANEL_POS: [number, number, number] = [-0.34, 0.72, -0.4];
+/** 작게 낮춘 차체에서도 계기판 전체가 보이도록 패널 높이를 보정한다. */
+const OBSERVE_PANEL_POS: [number, number, number] = [-0.34, 0.99, -0.46];
 const PANEL_TILT = -0.43;
 const SCREEN = {
   o2: { x: -0.232, w: 0.17, h: 0.17 * (O2_SIZE.h / O2_SIZE.w) },
@@ -147,6 +153,8 @@ function sleevePose(side: 1 | -1): { position: [number, number, number]; quatern
 
 export function Vehicle({
   location,
+  observing,
+  clearView,
   activeDashboardAnchors,
   observedAnchors,
   anchorLabels,
@@ -278,11 +286,12 @@ export function Vehicle({
     }
   }, -1);
 
-  const shownHotspots = activeDashboardAnchors.filter((a) => a in DASHBOARD_ANCHORS);
+  const shownHotspots = (clearView ? [] : activeDashboardAnchors).filter((a) => a in DASHBOARD_ANCHORS);
   const lowDetail = lowSpec;
 
   return (
     <group ref={root}>
+      <group visible={!clearView} scale={observing ? 0.72 : 1} position={[0, observing ? -0.12 : 0, 0]}>
       {/* ── 차체 ── */}
       {/* 바닥과 청록 띠 */}
       <RoundedBox args={[1.62, 0.22, 2.4]} radius={0.1} smoothness={seg} bevelSegments={seg} material={mats.cream} position={[0, 0.13, 0.04]} />
@@ -360,7 +369,7 @@ export function Vehicle({
       {/* ── 계기판 ── */}
       <RoundedBox args={[0.8, 0.34, 0.36]} radius={0.08} smoothness={seg} bevelSegments={seg} material={mats.cream} position={[-0.38, 0.49, -0.55]} />
       <RoundedBox args={[0.7, 0.34, 0.36]} radius={0.08} smoothness={seg} bevelSegments={seg} material={mats.cream} position={[0.42, 0.49, -0.57]} />
-      <group position={PANEL_POS} rotation={[PANEL_TILT, 0, 0]}>
+      <group position={observing ? OBSERVE_PANEL_POS : PANEL_POS} rotation={[PANEL_TILT, 0, 0]}>
         <RoundedBox args={[0.74, 0.18, 0.04]} radius={0.02} smoothness={seg} bevelSegments={seg} material={mats.bezel} position={[0, 0, -0.012]} />
         <mesh material={screens.o2Mat} position={[SCREEN.o2.x, 0, 0.012]}>
           <planeGeometry args={[SCREEN.o2.w, SCREEN.o2.h]} />
@@ -398,7 +407,7 @@ export function Vehicle({
       </group>
 
       {/* 낮은 앞유리 */}
-      <group position={[0, 0.74, -0.68]} rotation={[0.5, 0, 0]}>
+      <group position={[0, 0.64, -0.95]} rotation={[0.5, 0, 0]}>
         <mesh material={mats.glass}>
           <planeGeometry args={[1.36, 0.18]} />
         </mesh>
@@ -461,6 +470,7 @@ export function Vehicle({
       {/* ── 수연쌤(오른쪽 좌석) ── */}
       <group position={[0.38, 0.5, 0.1]}>
         <Suyeon {...suyeon} />
+      </group>
       </group>
     </group>
   );

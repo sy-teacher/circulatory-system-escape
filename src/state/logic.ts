@@ -249,7 +249,9 @@ export function observedCount(state: GameState): number {
 }
 
 export function canInfer(state: GameState): boolean {
-  return state.phase === 'observe' && observedCount(state) >= currentStep(state).minClues;
+  const step = currentStep(state);
+  const seen = state.observedClues[step.id] ?? [];
+  return state.phase === 'observe' && step.clues.every((clue) => seen.includes(clue.id));
 }
 
 export function openQuestion(state: GameState, now?: number): GameState {

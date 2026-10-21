@@ -3,7 +3,6 @@
 import { describe, expect, it } from 'vitest';
 import * as conceptsMod from '../data/concepts';
 import { CONCEPTS, CONCEPT_MAP, getConcept } from '../data/concepts';
-import { GAME_CONFIG } from '../data/config';
 import * as dialogueMod from '../data/dialogue';
 import { buildIntroWake, buildReturnLines, introRuleLine, rememberedLine } from '../data/dialogue';
 import * as heartMod from '../data/heart';
@@ -209,8 +208,7 @@ describe('순환 경로', () => {
     const clueIds = ROUTE.flatMap((s) => s.clues.map((c) => c.id));
     expect(new Set(clueIds).size).toBe(clueIds.length);
     for (const s of ROUTE) {
-      expect(s.minClues).toBe(s.kind === 'core' ? GAME_CONFIG.minCluesCore : GAME_CONFIG.minCluesReview);
-      expect(s.clues.length, s.id).toBeGreaterThanOrEqual(s.minClues);
+      expect(s.clues.length, s.id).toBeGreaterThan(0);
       const anchors = s.clues.map((c) => c.anchor);
       expect(new Set(anchors).size, s.id).toBe(anchors.length);
       for (const c of s.clues) expect(c.anchor && c.title && c.text, c.id).toBeTruthy();
@@ -265,7 +263,7 @@ describe('지도', () => {
     expect([...CIRCULATION_ACTIVITY.pulmonary].sort()).toEqual(pul.sort());
     expect([...CIRCULATION_ACTIVITY.systemic].sort()).toEqual(sys.sort());
     expect(pul.length + sys.length).toBe(CYCLE.length);
-    // 허파순환: 우심실 → 폐동맥 → 폐의 모세혈관 → 폐정맥 → 좌심방
+    // 허파순환: 우심실 → 폐동맥 → 허파의 모세혈관 → 폐정맥 → 좌심방
     expect(CIRCULATION_ACTIVITY.pulmonary).toEqual(['rv', 'pa', 'lungCap', 'pv', 'la']);
     expect(CIRCULATION_ACTIVITY.systemic).toEqual(['lv', 'aorta', 'sysCap', 'venaCava', 'ra']);
   });
@@ -500,12 +498,12 @@ describe('과학 표현 규칙', () => {
     expect(getQuestion('q-s3').misconceptionFeedback['s3-r-oxygen']).toContain('심장을 기준');
   });
 
-  it('모세혈관에서 혈구는 혈관 밖으로 나가지 않고, 적혈구는 폐포 안으로 들어가지 않는다', () => {
+  it('모세혈관에서 혈구는 혈관 밖으로 나가지 않고, 적혈구는 허파꽈리 안으로 들어가지 않는다', () => {
     const cap = getConcept('capillary');
     expect(cap.explanation).toContain('혈구는 혈관 밖으로 나가지 않');
     expect(cap.recheck.answer).toBe(false);
     expect(getConcept('pulmonary-exchange').recheck.answer).toBe(false);
-    expect(getQuestion('q-s7').explanation).toContain('적혈구가 폐포 안으로 들어가지는 않');
+    expect(getQuestion('q-s7').explanation).toContain('적혈구가 허파꽈리 안으로 들어가지는 않');
     expect(STEP_MAP.S2.clues.find((c) => c.id === 's2-c-narrow')!.text).toContain('한 줄로');
   });
 

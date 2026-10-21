@@ -316,6 +316,8 @@ function SceneRoot({ game }: { game: GameState }): JSX.Element {
       {probe && (
         <Vehicle
           location={displayed}
+          observing={game.phase === 'observe' || game.phase === 'question'}
+          clearView={!!focusAnchor && !isDashboardAnchor(focusAnchor)}
           activeDashboardAnchors={anchors.dashboard}
           observedAnchors={anchors.observed}
           anchorLabels={anchors.labels}

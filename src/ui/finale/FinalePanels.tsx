@@ -107,7 +107,7 @@ function ActivityInner({ game }: { game: GameState }) {
                 <div className="activity-range is-pulmonary">
                   <h3>허파순환</h3>
                   <p>{CIRCULATION_ACTIVITY.pulmonary.map((n) => MAP_NODES[n].name).join(' → ')}</p>
-                  <p className="activity-range-note">심장(우심실)에서 나간 혈액이 폐를 거쳐 심장(좌심방)으로 돌아와요. 폐의 모세혈관에서 산소가 풍부해져요.</p>
+                  <p className="activity-range-note">심장(우심실)에서 나간 혈액이 허파를 거쳐 심장(좌심방)으로 돌아와요. 허파의 모세혈관에서 산소가 풍부해져요.</p>
                 </div>
                 <div className="activity-range is-systemic">
                   <h3>온몸순환</h3>
@@ -370,7 +370,6 @@ function EscapeInner({ game }: { game: GameState }) {
         <div className="escape-message">
           <p className="escape-main">{ESCAPE_MESSAGE.main}</p>
           <p className="escape-warning">{ESCAPE_MESSAGE.warning}</p>
-          <p className="escape-joke">{ESCAPE_MESSAGE.joke}</p>
         </div>
 
         <div className="escape-actions">

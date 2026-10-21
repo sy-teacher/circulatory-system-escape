@@ -165,7 +165,7 @@ describe('진행 중 보고서', () => {
     expect(text).toContain('탐험 중간 기록');
     expect(text).toContain('(해결하면 공개됩니다)');
     expect(text).toContain(`나의 첫 답: ${choiceText(q2, 's2-a-lungcap')} / ${choiceText(q2, 's2-r-alveoli')}`);
-    expect(text).toContain('재도전 결과: 아직 해결하지 못함');
+    expect(text).not.toContain('재도전 결과:');
     for (const t of [STEP_MAP.S2.solvedName, choiceText(q2, q2.correctAnswer), choiceText(q2, q2.correctReason)]) {
       expect(text).not.toContain(t);
     }
@@ -184,8 +184,8 @@ describe('진행 중 보고서', () => {
       attempts: 2,
       firstAnswerText: choiceText(q2, 's2-a-lungcap'), // 첫 답은 그대로
     });
-    // pulmonary-exchange 설명에는 아직 풀지 않은 7단계의 '폐포'가 나오므로 진행 중에는 숨긴다
-    expect(s2b?.conceptIds).toEqual(['systemic-exchange']);
+    // 허파꽈리는 관찰 용어로 공개하므로, 해결한 문항의 관련 개념도 표시한다.
+    expect(s2b?.conceptIds).toEqual(['systemic-exchange', 'pulmonary-exchange']);
     const groups = Object.fromEntries(r2.conceptGroups.map((c) => [c.concept.id, c.questionLabels]));
     expect(groups['systemic-exchange']).toEqual([`2단계 · ${STEP_MAP.S2.solvedName}`]);
     expect(reportToText(r2)).toContain(`정답: ${choiceText(q2, q2.correctAnswer)} / ${choiceText(q2, q2.correctReason)}`);
@@ -250,7 +250,7 @@ describe('보충 개념 묶음', () => {
     expect(r.conceptGroups[0].questionLabels).toEqual(['6단계 · 폐동맥', '8단계 · 폐정맥']);
     expect(r.reasonOnlyItems.map((i) => i.questionId)).toEqual(['q-s6', 'q-s8']);
     const text = reportToText(r);
-    expect(text).toContain(`■ ${getConcept('artery-vein').name}  (관련: 6단계 · 폐동맥, 8단계 · 폐정맥)`);
+    expect(text).toContain(`■ ${getConcept('artery-vein').name}`);
   });
 
   it('같은 문항을 여러 번 틀려도 관련 문항 이름은 한 번만, 이후 시도에서 드러난 개념도 포함한다', () => {
@@ -358,8 +358,8 @@ describe('재시작과 탈출', () => {
     const text = reportToText(r);
     expect(text).toContain('탈출 성공');
     expect(text).toContain('재시작 1회');
-    expect(text).toContain(`재도전 결과: 해결함(${MAX + 2}번째 시도)`);
-    expect(text).toContain('마지막 재확인: 맞힘');
+    expect(text).toContain(`정답 설명: ${getQuestion('q-s1').explanation}`);
+    expect(text).not.toContain('마지막 재확인:');
     expect(text).toContain('완료(처음부터 정답)');
   });
 });
@@ -392,7 +392,7 @@ describe('보고서 텍스트', () => {
     const full = texts[1];
     expect(full).toContain('[보충할 개념]');
     expect(full).toContain('설명: ');
-    expect(full).toContain('다시 생각하기: ');
+    expect(full).not.toContain('다시 생각하기: ');
     for (const g2 of r.conceptGroups) expect(full).toContain(g2.concept.name);
     // 빈 기록
     const empty = report(L.newGame('empty', 0));

@@ -27,7 +27,7 @@ export function ClueTray() {
   const step = stepAt(game);
   const seen = game.observedClues[step.id] ?? [];
   const n = observedCount(game);
-  const min = step.minClues;
+  const min = step.clues.length;
   const ready = canInfer(game);
   const isReview = step.kind === 'review';
 
@@ -46,7 +46,7 @@ export function ClueTray() {
           <strong className={n >= min ? 'is-enough' : undefined}>
             {n}/{min}
           </strong>
-          <span className="visually-hidden">{n >= min ? ' (추론할 수 있는 만큼 모았어요)' : ''}</span>
+          <span className="visually-hidden">{n >= min ? ' (모든 단서를 확인했어요)' : ''}</span>
         </h2>
         <button
           type="button"
@@ -122,7 +122,7 @@ export function ClueTray() {
             추론하기
           </button>
           <p id="clue-infer-help" className="clue-help">
-            {ready ? '단서가 모였어요! 위치와 근거를 골라 볼까요? ' : ''}단서를 {min}개 이상 확인하면 추론할 수 있어요
+            {ready ? '단서가 모였어요! 위치와 근거를 골라 볼까요? ' : ''}모든 관찰 단서를 확인하면 추론할 수 있어요
           </p>
         </div>
       )}

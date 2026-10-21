@@ -299,7 +299,7 @@ function CapillaryArt({ o2, lung }: { o2: O2; lung: boolean }) {
           <Rbc key={x} x={x} y={95} r={15} squash={1.2} color={rbcColor(o2, x / 320)} />
         ))}
       </g>
-      {/* 학습용 입자: 산소(흰 점)의 이동 방향(폐: 주머니 → 혈액, 온몸: 혈액 → 세포) */}
+      {/* 학습용 입자: 산소(흰 점)의 이동 방향(허파: 주머니 → 혈액, 온몸: 혈액 → 세포) */}
       <g fill="#ffffff" stroke="#7ee0ff" strokeWidth={1.2}>
         {[60, 160, 260].map((x) => (
           <circle key={x} cx={x} cy={lung ? 62 : 128} r={4} />

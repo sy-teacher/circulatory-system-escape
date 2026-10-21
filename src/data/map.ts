@@ -6,7 +6,7 @@ import type { MapEdge, MapNode, NodeId } from './types';
 export const MAP_VIEWBOX = { width: 600, height: 540 };
 
 export const MAP_NODES: Record<NodeId, MapNode> = {
-  lungCap: { id: 'lungCap', name: '폐의 모세혈관', x: 300, y: 62, circulation: 'pulmonary', kind: 'capillary' },
+  lungCap: { id: 'lungCap', name: '허파의 모세혈관', x: 300, y: 62, circulation: 'pulmonary', kind: 'capillary' },
   pa: { id: 'pa', name: '폐동맥', x: 168, y: 150, circulation: 'pulmonary', kind: 'vessel' },
   pv: { id: 'pv', name: '폐정맥', x: 432, y: 150, circulation: 'pulmonary', kind: 'vessel' },
   ra: { id: 'ra', name: '우심방', x: 252, y: 236, circulation: 'systemic', kind: 'chamber' },
