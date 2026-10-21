@@ -45,7 +45,7 @@ function startGame(sessionId = 'logic-test'): GameState {
 
 const currentQ = (g: GameState): Question => getQuestion(L.currentStep(g).questionId);
 
-/** 최소 단서를 확인하고 추론 화면을 연다 */
+/** 모든 단서를 확인하고 추론 화면을 연다 */
 function toQuestion(g: GameState): GameState {
   if (g.phase === 'question') return g;
   const step = L.currentStep(g);
@@ -424,24 +424,23 @@ describe('힌트와 복습 문항', () => {
 // ── 관찰 ───────────────────────────────────────────────────
 
 describe('관찰과 추론 시작', () => {
-  it('최소 단서 수를 확인하기 전에는 추론 화면을 열 수 없다', () => {
+  it('모든 단서를 확인하기 전에는 추론 화면을 열 수 없다', () => {
     let g = startGame();
     const step = L.currentStep(g);
-    expect(step.minClues).toBe(GAME_CONFIG.minCluesCore);
     expect(L.canInfer(g)).toBe(false);
     expect(L.openQuestion(g, tick())).toBe(g);
-    for (let i = 0; i < step.minClues - 1; i++) g = L.observeClue(g, step.clues[i].id, tick());
-    expect(L.observedCount(g)).toBe(step.minClues - 1);
+    for (let i = 0; i < step.clues.length - 1; i++) g = L.observeClue(g, step.clues[i].id, tick());
+    expect(L.observedCount(g)).toBe(step.clues.length - 1);
     expect(L.openQuestion(g, tick())).toBe(g);
     // 같은 단서를 다시 봐도 수가 늘지 않는다
     expect(L.observeClue(g, step.clues[0].id, tick())).toBe(g);
-    g = L.observeClue(g, step.clues[step.minClues - 1].id, tick());
+    g = L.observeClue(g, step.clues[step.clues.length - 1].id, tick());
     expect(L.canInfer(g)).toBe(true);
     g = L.openQuestion(g, tick());
     expect(g.phase).toBe('question');
-    // 추론 중에도 단서를 더 볼 수 있다(벌점 없음)
-    g = L.observeClue(g, step.clues[step.minClues].id, tick());
-    expect(g.observedClues[step.id]).toHaveLength(step.minClues + 1);
+    // 추론 중에도 확인한 단서를 다시 볼 수 있다.
+    expect(L.observeClue(g, step.clues[0].id, tick())).toBe(g);
+    expect(g.observedClues[step.id]).toHaveLength(step.clues.length);
     expect(L.backToObserve(g, tick()).phase).toBe('observe');
   });
 
@@ -457,12 +456,14 @@ describe('관찰과 추론 시작', () => {
     expect(g.observedClues).toEqual({});
   });
 
-  it('복습 단계는 단서 1개로 추론할 수 있다', () => {
+  it('복습 단계도 모든 단서를 확인해야 추론할 수 있다', () => {
     let g = solve(startGame());
     const step = L.currentStep(g);
     expect(step.kind).toBe('review');
-    expect(step.minClues).toBe(GAME_CONFIG.minCluesReview);
-    g = L.observeClue(g, step.clues[0].id, tick());
+    for (const clue of step.clues) {
+      expect(L.openQuestion(g, tick())).toBe(g);
+      g = L.observeClue(g, clue.id, tick());
+    }
     expect(L.openQuestion(g, tick()).phase).toBe('question');
   });
 

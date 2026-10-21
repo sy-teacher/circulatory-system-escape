@@ -1,4 +1,4 @@
-// 순환계 지도(정면 교과서식 모식도): 위 = 폐, 가운데 = 심장(4개의 방), 아래 = 온몸.
+// 순환계 지도(정면 교과서식 모식도): 위 = 허파, 가운데 = 심장(4개의 방), 아래 = 온몸.
 // 정답 노출 규칙
 //  - play: 밝혀낸 지점(record.discovered)과 해결한 연결선(visibleEdges)만 그린다.
 //          아직 모르는 지점은 그 위치에 아무것도 그리지 않는다(빈 칸도 정답 힌트가 되므로).
@@ -333,7 +333,7 @@ export function CirculationMap({
         <g className="cmap-regions" aria-hidden="true">
           <rect x={196} y={4} width={208} height={112} rx={36} className="cmap-region is-lung" />
           <text x={208} y={23} className="cmap-region-label">
-            폐
+            허파
           </text>
           <rect x={198} y={196} width={204} height={192} rx={30} className="cmap-region is-heart" />
           <rect x={30} y={430} width={540} height={108} rx={30} className="cmap-region is-body" />
@@ -572,7 +572,7 @@ export function MapLegend({ mini = false, showCirculation = false, selecting = f
                 <line x1={2} y1={6} x2={42} y2={6} className="cmap-circ-outline is-pulmonary" />
               </svg>
               <span>
-                <strong>허파순환</strong> 우심실 → 폐동맥 → 폐의 모세혈관 → 폐정맥 → 좌심방
+                <strong>허파순환</strong> 우심실 → 폐동맥 → 허파의 모세혈관 → 폐정맥 → 좌심방
               </span>
             </li>
             <li>

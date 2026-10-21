@@ -1,6 +1,6 @@
 // 놀이공원(도입·탈출 장면). 맑은 낮의 놀이공원과 '회전 열차'.
 // 실제 놀이공원의 로고·놀이기구를 따라 하지 않은 일반적인 모습이다(장소 이름은 대사에만 나온다).
-// 탐사선을 그리지 않으므로(vehicle: 'none') 이 컴포넌트가 열차 칸과 친구 '지우'를 직접 그린다.
+// 탐사선을 그리지 않으므로(vehicle: 'none') 이 컴포넌트가 열차 칸과 친구 '민규'를 직접 그린다.
 
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
@@ -382,7 +382,7 @@ function drawMapSheet(g: CanvasRenderingContext2D, W: number): void {
     label(text, cx, cy + 2, 34, '#4a3030', 800);
   };
 
-  place('폐', 512, 170, 220, 80, '#ffe4e8', '#e48a9a');
+  place('허파', 512, 170, 220, 80, '#ffe4e8', '#e48a9a');
   place('온몸', 512, 580, 300, 80, '#fff1d6', '#e0b26a');
 
   // 심장(앞에서 본 모습: 몸의 오른쪽 = 그림의 왼쪽)
@@ -465,7 +465,7 @@ function drawMapSheet(g: CanvasRenderingContext2D, W: number): void {
     ],
     POOR,
   );
-  // 우심실 → 폐(산소가 적은 혈액) — 위의 선 위로 지나간다
+  // 우심실 → 허파(산소가 적은 혈액) — 위의 선 위로 지나간다
   route(
     [
       [352, 418],
@@ -475,7 +475,7 @@ function drawMapSheet(g: CanvasRenderingContext2D, W: number): void {
     ],
     POOR,
   );
-  // 폐 → 좌심방(산소가 풍부한 혈액)
+  // 허파 → 좌심방(산소가 풍부한 혈액)
   route(
     [
       [622, 170],
@@ -1316,7 +1316,7 @@ function buildWorld(frames: PathFrames, lowSpec: boolean): World {
 }
 
 // ─────────────────────────────────────────────────────────────
-//  열차 칸 + 친구 지우 + (탈출 장면) 손에 든 지도
+//  열차 칸 + 친구 민규 + (탈출 장면) 손에 든 지도
 // ─────────────────────────────────────────────────────────────
 
 interface Cart {
@@ -1398,7 +1398,7 @@ function buildCart(lowSpec: boolean): Cart {
   // 나(왼쪽 자리, 카메라 위치)의 다리만 그린다
   addLegs(lead, block, bag, -0.38);
 
-  // ── 친구 지우(오른쪽 자리): 남색 재킷, 흰 셔츠, 짧은 검은 머리 ──
+  // ── 친구 민규(오른쪽 자리): 남색 재킷, 흰 셔츠, 짧은 검은 머리 ──
   addLegs(lead, block, bag, 0.38);
   const skin = bag.lam('#f6c9a5');
   const hair = bag.lam('#1f1b1b');
@@ -1590,7 +1590,7 @@ function ParkScene({ lowSpec, reduceMotion }: LocationProps) {
       tr.quaternion.copy(runtime.vehicleQuaternion);
     }
 
-    // ── 지우: 말할 때 나(카메라)를 바라본다. 탈출 장면에서는 손에 든 지도를 본다 ──
+    // ── 민규: 말할 때 나(카메라)를 바라본다. 탈출 장면에서는 손에 든 지도를 본다 ──
     const talking = s.talkKey !== '';
     const since = s.t - s.talkStart;
     let tTorso = 0;

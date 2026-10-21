@@ -66,7 +66,7 @@ export function TitleScreen() {
               <span className="title-bracket" aria-hidden="true">
                 《
               </span>
-              순환계 방탈출: <span className="title-name-sub">수연쌤의 혈관 탐험</span>
+              순환계 방탈출: <span className="title-name-sub">수연쌤과 혈관 탐험</span>
               <span className="title-bracket" aria-hidden="true">
                 》
               </span>
@@ -141,23 +141,22 @@ export function TitleScreen() {
           </h2>
           <ol className="title-steps">
             <li>
-              <span aria-hidden="true">🖱️</span> 화면을 <strong>드래그</strong>해서 주변을 둘러봐요.
+              <span aria-hidden="true">🖱️</span> 화면을 움직여 주변 둘러보기
             </li>
             <li>
-              <span aria-hidden="true">✨</span> 반짝이는 <strong>관찰 지점</strong>을 눌러 단서를 모아요.
+              <span aria-hidden="true">✨</span> 반짝이는 관찰 지점 눌러서 단서 모으기
             </li>
             <li>
-              <span aria-hidden="true">🔍</span> 단서를 <strong>{GAME_CONFIG.minCluesCore}개 이상</strong> 모으면 ‘추론하기’를 눌러요. (복습은 {GAME_CONFIG.minCluesReview}개)
+              <span aria-hidden="true">🔍</span> 단서를 모으면 추론하기
             </li>
             <li>
-              <span aria-hidden="true">📍</span> 지금 있는 <strong>위치</strong>와 그렇게 생각한 <strong>근거</strong>를 함께 골라요.
+              <span aria-hidden="true">📍</span> 현재 위치와 그렇게 생각한 근거 고르기
             </li>
             <li>
-              <span aria-hidden="true">❤️</span> 한 탐험에서 <strong>{GAME_CONFIG.maxWrongPerRun}번</strong>까지 틀려도 계속 가요. {GAME_CONFIG.maxWrongPerRun + 1}번째 오답이면 출발점으로
-              돌아가지만, 기록은 그대로 남아요.
+              <span aria-hidden="true">❤️</span> 목숨은 {GAME_CONFIG.maxWrongPerRun}개, {GAME_CONFIG.maxWrongPerRun + 1}번째 틀리면 출발점으로 돌아감(기록은 남음)
             </li>
             <li>
-              <span aria-hidden="true">💡</span> <strong>힌트는 무료!</strong> 써도 오답 수가 늘지 않아요.
+              <span aria-hidden="true">💡</span> <strong>힌트는 무료</strong>
             </li>
           </ol>
         </section>

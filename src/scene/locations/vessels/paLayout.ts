@@ -1,5 +1,5 @@
 // 폐동맥 공간의 배치. 판막 바로 뒤에서 시작해 왼쪽으로 휘고(뒤 왼쪽에 판막이 보이도록),
-// t≈0.45에서 두 갈래(양쪽 폐)로 갈라진 뒤 한 갈래를 따라간다.
+// t≈0.45에서 두 갈래(양쪽 허파)로 갈라진 뒤 한 갈래를 따라간다.
 
 import { Vector3 } from 'three';
 import { makeVessel, pathOffset, radiusKnots, wallBasis, type V3, type WallHole } from './common';
@@ -61,7 +61,7 @@ export const PA = makeVessel(paAxisPoints(), paRadius);
 export const PA_VALVE_BACK = 1.5;
 export const PA_ROOT_LENGTH = 4.2;
 
-/** 다른 쪽 폐로 가는 갈래(왼쪽) */
+/** 다른 쪽 허파로 가는 갈래(왼쪽) */
 export const PA_FORK_HOLE: WallHole = { t: 0.47, angle: -1.5, a: 2.4, b: 2.15 };
 export const PA_FORK_FORWARD = 1.0;
 export const PA_FORK_LENGTH = 13;

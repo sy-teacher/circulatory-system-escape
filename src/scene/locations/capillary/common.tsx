@@ -1,7 +1,7 @@
-// 두 모세혈관 공간(온몸·폐)이 함께 쓰는 도구: 경로 만들기, 좌표 계산, 얇은 혈관 벽.
+// 두 모세혈관 공간(온몸·허파)이 함께 쓰는 도구: 경로 만들기, 좌표 계산, 얇은 혈관 벽.
 
 import { useEffect, useMemo } from 'react';
-import { CatmullRomCurve3, Matrix4, Quaternion, Vector3, type BufferGeometry, type Curve } from 'three';
+import { CanvasTexture, RepeatWrapping, SRGBColorSpace, CatmullRomCurve3, Matrix4, Quaternion, Vector3, type BufferGeometry, type Curve } from 'three';
 import { PALETTE } from '../../palette';
 import { computePathFrames, samplePath, type PathFrames } from '../../shared/pathFrames';
 import { usePulseMaterial } from '../../shared/usePulse';
@@ -186,11 +186,41 @@ export interface TubeSpec {
  * 아주 얇고 반투명한 모세혈관 벽(+ 갈라져 나가는 가지 혈관들). 같은 맥동 재질을 함께 쓴다.
  * 양면으로 그려 안에서도 밖에서도 보인다. 투명 물체 중 나중에 그려지도록 renderOrder 2.
  */
+function membraneTexture(): CanvasTexture {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 256;
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = '#ffe2e5';
+  ctx.fillRect(0, 0, 256, 256);
+  ctx.strokeStyle = '#bf7185';
+  ctx.lineWidth = 2.5;
+  for (let row = -1; row < 3; row++) {
+    for (let col = -1; col < 3; col++) {
+      const x = col * 128 + (row % 2) * 64;
+      const y = row * 128;
+      ctx.beginPath();
+      ctx.moveTo(x + 16, y);
+      ctx.bezierCurveTo(x - 6, y + 42, x + 8, y + 88, x + 16, y + 128);
+      ctx.lineTo(x + 144, y + 128);
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(150, 75, 108, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(x + 78, y + 62, 9, 17, -0.35, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  const texture = new CanvasTexture(canvas);
+  texture.wrapS = texture.wrapT = RepeatWrapping;
+  texture.repeat.set(3, 1);
+  texture.colorSpace = SRGBColorSpace;
+  return texture;
+}
+
 export function ThinVessels({
   tubes,
   lowSpec,
   reduceMotion,
-  opacity = 0.35,
+  opacity = 0.48,
   colorA = PALETTE.capillaryWall,
   colorB = '#ff9aa8',
 }: {
@@ -201,10 +231,12 @@ export function ThinVessels({
   colorA?: string;
   colorB?: string;
 }) {
+  const texture = useMemo(membraneTexture, []);
+  useEffect(() => () => texture.dispose(), [texture]);
   const geometries = useMemo<BufferGeometry[]>(
     () =>
-      tubes.map((tb) =>
-        buildVesselGeometry({
+      tubes.map((tb) => {
+        const geometry = buildVesselGeometry({
           curve: tb.curve,
           radius: tb.radius,
           tubularSegments: lowSpec ? Math.ceil(tb.tubular * 0.6) : tb.tubular,
@@ -214,8 +246,12 @@ export function ThinVessels({
           colorB,
           streaks: 5,
           seed: tb.seed,
-        }),
-      ),
+        });
+        const uv = geometry.getAttribute('uv');
+        const rows = tb.curve.getLength() / 4;
+        for (let j = 0; j < uv.count; j++) uv.setY(j, uv.getY(j) * rows);
+        return geometry;
+      }),
     [tubes, lowSpec, colorA, colorB],
   );
   useEffect(() => () => geometries.forEach((g) => g.dispose()), [geometries]);
@@ -225,11 +261,16 @@ export function ThinVessels({
     opacity,
     doubleSide: true,
     emissive: '#ffd0d6',
-    emissiveIntensity: 0.18,
+    emissiveIntensity: 0.08,
     amp: 0.025,
     waves: 2,
     reduceMotion,
   });
+  useEffect(() => {
+    material.map = texture;
+    material.flatShading = false;
+    material.needsUpdate = true;
+  }, [material, texture]);
   return (
     <group>
       {geometries.map((g, i) => (

@@ -55,7 +55,10 @@
   display: none;
 }
 
-.hud-info {
+.hud-info.panel {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--panel-border);
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   gap: 6px;

@@ -2,9 +2,8 @@
 // 이름을 입력받지 않고, 어디에도 전송하지 않는다(인쇄·복사는 학생이 직접).
 // 인쇄할 때 보고서만 보이도록 document.body 바로 아래에 그린다(@media print에서 나머지를 숨김).
 
-import { useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { getConcept } from '../../data/concepts';
 import { ROUTE } from '../../data/route';
 import { buildReport, type Report, type ReportItem } from '../../report/buildReport';
 import { reportToText } from '../../report/reportText';
@@ -65,6 +64,15 @@ function ReportDialog({ record, archived }: { record: LearningRecord | null; arc
   const ref = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const copyRef = useRef<HTMLButtonElement>(null);
+  const imageBusy = useRef(false);
+  const imageMounted = useRef(true);
+  const [imageStatus, setImageStatus] = useState<'idle' | 'preparing' | 'ready' | 'failed'>('idle');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  useEffect(() => () => { if (imageUrl) URL.revokeObjectURL(imageUrl); }, [imageUrl]);
+  useEffect(() => {
+    imageMounted.current = true;
+    return () => { imageMounted.current = false; };
+  }, []);
   const titleId = useId();
   useDialogA11y(ref, closeReport, closeRef);
 
@@ -86,6 +94,33 @@ function ReportDialog({ record, archived }: { record: LearningRecord | null; arc
     }
   };
 
+  const imageName = `순환계-학습결과-${fmtDate(now).slice(0, 10).replaceAll('.', '-')}.png`;
+  const doDownloadImage = async () => {
+    const sheet = ref.current?.querySelector<HTMLElement>('article.report-sheet');
+    if (!sheet || imageBusy.current) return;
+    imageBusy.current = true;
+    setImageStatus('preparing');
+    setImageUrl(null);
+    try {
+      const { renderReportImage } = await import('../../report/reportImage');
+      const blob = await renderReportImage(sheet);
+      if (!imageMounted.current) return;
+      const url = URL.createObjectURL(blob);
+      setImageUrl(url);
+      setImageStatus('ready');
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = imageName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch {
+      setImageStatus('failed');
+    } finally {
+      imageBusy.current = false;
+    }
+  };
+
   const rootClass = ['report-root', largeText ? 'is-large-text' : '', reduceMotion ? 'is-reduced-motion' : ''].filter(Boolean).join(' ');
 
   return (
@@ -97,9 +132,13 @@ function ReportDialog({ record, archived }: { record: LearningRecord | null; arc
             학습 결과
           </span>
           <div className="report-toolbar-btns">
+            <button type="button" className="btn btn-small" onClick={doDownloadImage} disabled={!report || imageStatus === 'preparing'} aria-busy={imageStatus === 'preparing'}>
+              <Icon name="report" size={18} />
+              {imageStatus === 'preparing' ? '이미지 만드는 중…' : '이미지 다운로드'}
+            </button>
             <button type="button" className="btn btn-small" onClick={() => window.print()} disabled={!report}>
               <Icon name="report" size={18} />
-              인쇄 / PDF로 저장
+              인쇄
             </button>
             <button ref={copyRef} type="button" className="btn btn-small" onClick={doCopy} disabled={!report}>
               <Icon name="book" size={18} />
@@ -111,6 +150,9 @@ function ReportDialog({ record, archived }: { record: LearningRecord | null; arc
             </button>
           </div>
           <p className="report-copy-msg" aria-live="polite">
+            {imageStatus === 'preparing' && '보고서 전체를 PNG 이미지로 만들고 있어요. 잠시 기다려 주세요.'}
+            {imageStatus === 'failed' && '이미지 저장을 완료하지 못했어요. 이미지 다운로드를 다시 눌러 주세요.'}
+            {imageStatus === 'ready' && imageUrl && <a href={imageUrl} download={imageName}>PNG 이미지 저장 · 자동으로 저장되지 않았다면 눌러 주세요.</a>}
             {copy === 'copied' && '결과 텍스트를 복사했어요. 원하는 곳에 붙여 넣으세요.'}
             {copy === 'failed' && '자동 복사가 되지 않았어요. 아래 상자의 글을 직접 선택해서 복사해 주세요.'}
           </p>
@@ -159,7 +201,7 @@ function ReportSheet({ report, record, archived, titleId }: { report: Report; re
   return (
     <article className="report-sheet">
       <header className="report-head">
-        <p className="report-kicker">《순환계 방탈출: 수연쌤의 혈관 탐험》 학습 진단 보고서</p>
+        <p className="report-kicker">《순환계 방탈출: 수연쌤과 혈관 탐험》 학습 진단 보고서</p>
         <h1 id={titleId} className="report-title">
           <span aria-hidden="true">{r.complete ? '🎉 ' : '🧭 '}</span>
           {r.title}
@@ -302,31 +344,6 @@ function ReportSheet({ report, record, archived, titleId }: { report: Report; re
               <article key={g.concept.id} className="report-card is-concept">
                 <h3 className="report-card-title">{g.concept.name}</h3>
                 <p>{g.concept.explanation}</p>
-                <p className="report-rethink">
-                  <strong>다시 생각하기</strong> {g.concept.rethink}
-                </p>
-                {g.questionLabels.length > 0 && (
-                  <div className="report-related">
-                    <strong>관련 문제</strong>
-                    <ul>
-                      {g.questionLabels.map((l) => (
-                        <li key={l}>{l}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <p className="report-recheck">
-                  <strong>마지막 재확인</strong>{' '}
-                  {g.recheck ? (
-                    g.recheck.correct ? (
-                      <span className="report-mark is-ok">✓ 맞혔어요</span>
-                    ) : (
-                      <span className="report-mark is-review">! 한 번 더 확인해 보세요</span>
-                    )
-                  ) : (
-                    <span className="report-mark">○ 아직 하지 않았어요</span>
-                  )}
-                </p>
               </article>
             ))}
           </div>
@@ -402,21 +419,8 @@ function ReportSheet({ report, record, archived, titleId }: { report: Report; re
 }
 
 function WrongCard({ item: it }: { item: ReportItem }) {
-  const concepts = it.conceptIds.map((id) => {
-    try {
-      return getConcept(id);
-    } catch {
-      return null;
-    }
-  });
-  const valid = concepts.filter((c): c is NonNullable<typeof c> => c !== null);
   return (
     <article className={`report-card is-${it.status}`}>
-      <header className="report-card-head">
-        <h3 className="report-card-title">{it.label}</h3>
-        <StatusBadge status={it.status} />
-        {it.reasonOnly && <span className="report-flag">위치는 맞혔지만 근거 확인이 필요함</span>}
-      </header>
       <p className="report-prompt">
         <strong>문제</strong> {it.prompt}
       </p>
@@ -441,40 +445,6 @@ function WrongCard({ item: it }: { item: ReportItem }) {
             </>
           ) : (
             <span className="report-hidden-answer">(해결하면 공개됩니다)</span>
-          )}
-        </dd>
-        {it.firstFeedback.length > 0 && (
-          <>
-            <dt>처음 받은 설명</dt>
-            <dd>
-              {it.firstFeedback.map((f, i) => (
-                <p key={i} className="report-feedback">
-                  {f}
-                </p>
-              ))}
-            </dd>
-          </>
-        )}
-        {valid.length > 0 && (
-          <>
-            <dt>보충할 개념</dt>
-            <dd>{valid.map((c) => c.name).join(', ')}</dd>
-            <dt>다시 생각하기</dt>
-            <dd>
-              <ul className="report-rethink-list">
-                {valid.map((c) => (
-                  <li key={c.id}>{c.rethink}</li>
-                ))}
-              </ul>
-            </dd>
-          </>
-        )}
-        <dt>재도전 후 해결 여부</dt>
-        <dd>
-          {it.resolved ? (
-            <span className="report-mark is-ok">✓ 해결했어요 (모두 {it.attempts}번 시도)</span>
-          ) : (
-            <span className="report-mark is-review">! 아직 해결하지 못했어요 (지금까지 {it.attempts}번 시도)</span>
           )}
         </dd>
         {it.explanation && (

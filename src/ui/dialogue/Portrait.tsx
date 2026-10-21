@@ -212,15 +212,15 @@ function StudentArt() {
   );
 }
 
-/** 친구 지우: 옆으로 묶은 머리와 후드티 */
+/** 친구 민규: 짧은 머리의 남학생, 청록 후드티 */
 function FriendArt() {
   const hair = '#6b4426';
   return (
     <>
-      {/* 묶은 머리 */}
-      <ellipse cx={97} cy={34} rx={9} ry={14} transform="rotate(28 97 34)" fill={hair} />
-      <circle cx={90} cy={27} r={3.6} fill="#ff7a8a" />
-      <path d="M22 66 C19 32 38 15 60 15 C82 15 101 32 98 66 Z" fill={hair} />
+      {/* 짧은 머리와 드러난 귀 */}
+      <path d="M25 57 C21 35 31 22 43 18 L49 10 L60 16 L74 12 L77 20 C92 24 98 38 94 57 Z" fill={hair} />
+      <ellipse cx={29} cy={61} rx={5} ry={8} fill="#f6cfae" />
+      <ellipse cx={91} cy={61} rx={5} ry={8} fill="#f6cfae" />
       <rect x={52} y={78} width={16} height={24} rx={4} fill="#e8b48f" />
       {/* 청록 후드티 */}
       <path d="M8 121 C11 106 26 99 44 97 H76 C94 99 109 106 112 121 Z" fill="#3fbfae" />
@@ -232,8 +232,8 @@ function FriendArt() {
       <ellipse cx={60} cy={58} rx={32} ry={29} fill="#f6cfae" />
       <ellipse cx={41} cy={70} rx={5.5} ry={3.3} fill="#f59aa0" opacity={0.75} />
       <ellipse cx={79} cy={70} rx={5.5} ry={3.3} fill="#f59aa0" opacity={0.75} />
-      {/* 가르마 앞머리 */}
-      <path d="M27 58 C25 31 42 20 60 20 C79 20 95 31 93 56 C89 46 82 39 72 36 C70 42 64 46 56 47 C48 48 40 46 34 41 C30 46 28 52 27 58 Z" fill={hair} />
+      {/* 짧고 자연스럽게 넘긴 앞머리 */}
+      <path d="M28 51 C26 31 43 20 60 20 C79 20 94 32 92 51 L84 42 L76 46 L68 37 L55 45 L48 39 L36 48 L32 44 Z" fill={hair} />
       <g>
         <ellipse cx={47} cy={61} rx={4.3} ry={5.3} fill={C.eye} />
         <circle cx={45.6} cy={59} r={1.7} fill="#fff" />
@@ -271,7 +271,7 @@ export interface PortraitProps {
 const SPEAKER_LABEL: Record<Speaker, string> = {
   suyeon: '수연쌤',
   student: '나',
-  friend: '친구 지우',
+  friend: '친구 민규',
   narration: '해설',
 };
 

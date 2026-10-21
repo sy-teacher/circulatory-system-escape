@@ -10,7 +10,7 @@ export interface InstrumentState {
   /** 산소가 변하는 공간에서 측정기 값이 움직이는 방향 */
   o2Trend: 'up' | 'down' | 'steady';
   /** 인체 내비게이터: 출발 쪽 → 도착 쪽 */
-  nav: { from: '심장' | '폐' | '온몸' | '심장 안'; to: '심장' | '폐' | '온몸' | '심장 안'; label: string } | null;
+  nav: { from: '심장' | '허파' | '온몸' | '심장 안'; to: '심장' | '허파' | '온몸' | '심장 안'; label: string } | null;
 }
 
 export const INSTRUMENTS: Record<LocationId, InstrumentState> = {
@@ -21,11 +21,11 @@ export const INSTRUMENTS: Record<LocationId, InstrumentState> = {
   sysCap: { o2: 0.95, o2Label: '산소 감소 중', o2Trend: 'down', nav: null },
   venaCava: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '온몸', to: '심장', label: '온몸 → 심장' } },
   ra: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '온몸', to: '심장 안', label: '온몸 → 심장 안' } },
-  rv: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '심장 안', to: '폐', label: '심장 → 폐' } },
-  pa: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '심장', to: '폐', label: '심장 → 폐' } },
+  rv: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '심장 안', to: '허파', label: '심장 → 허파' } },
+  pa: { o2: 0.35, o2Label: '산소 적음', o2Trend: 'steady', nav: { from: '심장', to: '허파', label: '심장 → 허파' } },
   lungCap: { o2: 0.35, o2Label: '산소 증가 중', o2Trend: 'up', nav: null },
-  pv: { o2: 0.95, o2Label: '산소 풍부', o2Trend: 'steady', nav: { from: '폐', to: '심장', label: '폐 → 심장' } },
-  la: { o2: 0.95, o2Label: '산소 풍부', o2Trend: 'steady', nav: { from: '폐', to: '심장 안', label: '폐 → 심장 안' } },
+  pv: { o2: 0.95, o2Label: '산소 풍부', o2Trend: 'steady', nav: { from: '허파', to: '심장', label: '허파 → 심장' } },
+  la: { o2: 0.95, o2Label: '산소 풍부', o2Trend: 'steady', nav: { from: '허파', to: '심장 안', label: '허파 → 심장 안' } },
 };
 
 /**

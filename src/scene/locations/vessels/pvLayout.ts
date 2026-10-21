@@ -1,4 +1,4 @@
-// 폐정맥 공간의 배치. 폐에서 오는 가는 혈관들이 합쳐지며(t 0~0.45) 중간 굵기가 되고,
+// 폐정맥 공간의 배치. 허파에서 오는 가는 혈관들이 합쳐지며(t 0~0.45) 중간 굵기가 되고,
 // 끝은 심장의 한 방으로 열린다. 중간에 백혈구가 세균을 쫓는 장면(R3)이 있다.
 
 import { Quaternion, Vector3 } from 'three';
@@ -36,7 +36,7 @@ export interface PvTributary {
   length: number;
 }
 
-/** 폐에서 오는 가는 혈관들(마지막 것이 'pv-merge') */
+/** 허파에서 오는 가는 혈관들(마지막 것이 'pv-merge') */
 export const PV_TRIBUTARIES: PvTributary[] = [
   { hole: { t: 0.1, angle: -1.45, a: 1.05, b: 0.9 }, forward: -0.9, length: 9 },
   { hole: { t: 0.17, angle: 1.7, a: 1.1, b: 0.95 }, forward: -0.9, length: 9 },

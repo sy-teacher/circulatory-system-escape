@@ -37,7 +37,7 @@ export const PALETTE = {
   /** 조직 세포 */
   tissue: '#f7b267',
   tissueNucleus: '#c0703a',
-  /** 폐포(공기 주머니) */
+  /** 허파꽈리(허파꽈리) */
   alveolus: '#fff4e8',
   /** 관찰 지점 표시 */
   hotspot: '#ffe066',

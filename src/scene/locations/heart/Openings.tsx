@@ -75,7 +75,7 @@ function ThickRing({ ring, lowSpec }: { ring: NonNullable<ChamberScene['thickRin
   );
 }
 
-/** 출구 너머에서 혈관이 두 갈래로 나뉘는 모습(양쪽 폐 방향) */
+/** 출구 너머에서 혈관이 두 갈래로 나뉘는 모습(양쪽 허파 방향) */
 function SplitVessel({ split, lowSpec }: { split: NonNullable<ChamberScene['split']>; lowSpec: boolean }) {
   const parts = useMemo(() => {
     const { center, T, N, B, trunkR, branchR, offset } = split;

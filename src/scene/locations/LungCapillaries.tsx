@@ -1,5 +1,5 @@
-// 폐의 모세혈관(lungCap). 단계 S7(t=0.42), R2(t=0.72).
-// 반투명한 공기 주머니 무리가 숨쉬듯 부풀었다 줄어든다. 우리가 탄 모세혈관은 주머니 하나의 바깥 표면을 감싸며 돌고,
+// 허파의 모세혈관(lungCap). 단계 S7(t=0.42), R2(t=0.72).
+// 반투명한 허파꽈리 무리가 숨쉬듯 부풀었다 줄어든다. 우리가 탄 모세혈관은 주머니 하나의 바깥 표면을 감싸며 돌고,
 // 다른 가는 혈관들이 주머니를 그물처럼 감싼다. 공기(주머니 안)와 혈액(혈관 안)은 얇은 두 겹의 벽으로 나뉜다.
 // 학습용 시각화: 산소는 주머니 → 혈액, 이산화탄소는 혈액 → 주머니. 적혈구는 산소가 적은 → 산소가 풍부한 색으로 바뀐다.
 // ※ 적혈구와 탐사선은 주머니 안으로 들어가지 않는다. 주머니에 정답 이름을 붙이지 않는다('공기'만 표시).
@@ -42,10 +42,10 @@ function LungCapillaries(props: LocationProps) {
 
   return (
     <group>
-      {/* 공기 주머니 무리와 그물처럼 감싼 가는 혈관 */}
+      {/* 허파꽈리 무리와 그물처럼 감싼 가는 혈관 */}
       <Alveoli sacs={SACS} lowSpec={lowSpec} reduceMotion={reduceMotion} />
       {/* 우리가 지나는 아주 얇은 혈관 벽(+ 갈라지고 모이는 가지) */}
-      <ThinVessels tubes={LUNG_TUBES} lowSpec={lowSpec} reduceMotion={reduceMotion} opacity={0.33} />
+      <ThinVessels tubes={LUNG_TUBES} lowSpec={lowSpec} reduceMotion={reduceMotion} opacity={0.48} />
 
       {/* 공기 공간: 주머니 안에 떠 있는 산소 */}
       <Molecules kind="o2" routes={air} count={Math.round(air.length * 1.3)} speed={0.22} lowSpec={lowSpec} reduceMotion={reduceMotion} wobble={0.3} seed={41} />

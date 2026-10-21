@@ -221,7 +221,7 @@ type NavPlace = NonNullable<InstrumentState['nav']>['from'];
 const NAV_POINTS: Record<NavPlace, [number, number]> = {
   심장: [104, 112],
   '심장 안': [104, 112],
-  폐: [83, 96],
+  허파: [83, 96],
   온몸: [96, 178],
 };
 
@@ -309,7 +309,7 @@ export function drawNav(screen: DashScreen, nav: InstrumentState['nav']): void {
   };
   body();
 
-  // 폐(두 개)와 심장 표시
+  // 허파(두 개)와 심장 표시
   ctx.fillStyle = 'rgba(255, 179, 193, 0.75)';
   ctx.beginPath();
   ctx.ellipse(84, 102, 9, 15, 0, 0, Math.PI * 2);
@@ -323,7 +323,7 @@ export function drawNav(screen: DashScreen, nav: InstrumentState['nav']): void {
   ctx.font = font(14, false);
   ctx.fillStyle = MUTED;
   ctx.textAlign = 'left';
-  ctx.fillText('폐', 148, 98);
+  ctx.fillText('허파', 148, 98);
   ctx.fillText('심장', 148, 120);
   ctx.fillText('온몸', 148, 182);
   ctx.strokeStyle = 'rgba(207,195,221,0.5)';
@@ -345,7 +345,7 @@ export function drawNav(screen: DashScreen, nav: InstrumentState['nav']): void {
     ctx.fillStyle = MUTED;
     ctx.fillText('신호 약함', tx, 108);
     ctx.font = font(20);
-    ctx.fillText('아주 가는 혈관 속이에요', tx, 146);
+    ctx.fillText('아주 가는 혈관 속', tx, 146, tw);
     screen.commit();
     return;
   }

@@ -65,6 +65,9 @@
 .report-copy-msg:empty {
   display: none;
 }
+.report-copy-msg a {
+  color: var(--accent);
+}
 
 .report-sheet {
   padding: 22px 26px 18px;
