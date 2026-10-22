@@ -3,10 +3,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 vi.mock('html-to-image', () => ({ toBlob: vi.fn() }));
 import { toBlob } from 'html-to-image';
 import { renderReportImage, reportImageRatio } from '../report/reportImage';
+import * as mapRaster from '../report/mapRaster';
+import * as svgImage from '../report/svgImage';
 
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.resetAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('학습 결과 PNG 저장', () => {
@@ -65,6 +68,8 @@ describe('학습 결과 PNG 저장', () => {
 
   it('지도 SVG의 영역 색·빈 연결선·글자·화살표와 무늬를 이미지 복사본에 보존한다', async () => {
     const { sheet, clone } = reportDom();
+    const rasterize = vi.spyOn(mapRaster, 'rasterizeReportMaps');
+    const legacyRasterize = vi.spyOn(svgImage, 'replaceReportMapsWithImages');
     const svgElement = (values: Record<string, string>) => ({
       values, style: { setProperty: vi.fn() },
     });
@@ -96,5 +101,7 @@ describe('학습 결과 PNG 저장', () => {
     });
     await renderReportImage(sheet);
     expect(toBlob).toHaveBeenCalledOnce();
+    expect(rasterize).toHaveBeenCalledExactlyOnceWith(sheet, clone);
+    expect(legacyRasterize).not.toHaveBeenCalled();
   });
 });

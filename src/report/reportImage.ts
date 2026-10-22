@@ -1,5 +1,6 @@
 import { toBlob } from 'html-to-image';
-import { localSvgReferences, replaceReportMapsWithImages } from './svgImage';
+import { localSvgReferences } from './svgImage';
+import { rasterizeReportMaps } from './mapRaster';
 
 const SVG_STYLE_PROPERTIES = [
   'color', 'fill', 'fill-opacity', 'fill-rule',
@@ -58,7 +59,7 @@ export async function renderReportImage(sheet: HTMLElement): Promise<Blob> {
     // 문서에 연결된 상태에서 CSS 변수·상속까지 계산한 값을 가져와야 한다.
     inlineSvgStyles(clone);
     // 지도는 원본 화면의 스타일을 담은 PNG로 먼저 확정한 다음 보고서에 합성한다.
-    await replaceReportMapsWithImages(sheet, clone);
+    await rasterizeReportMaps(sheet, clone);
     const width = clone.scrollWidth;
     const height = clone.scrollHeight;
     if (!width || !height) throw new Error('보고서 크기를 확인할 수 없습니다.');
